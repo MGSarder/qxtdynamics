@@ -71,19 +71,18 @@
       display: inline-block;
     }
       .image-container {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+      display: flex;
+      flex-direction: column; /* makes a column layout */
+      gap: 15px;
+      align-items: center;    /* center images horizontally */
   }
 
   .image-container img {
-    width: 300px;        /* fixed size for uniformity */
-    height: 200px;       /* keep consistent height */
-    object-fit: cover;   /* crop without distortion */
-    border-radius: 10px; /* optional rounded corners */
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      width: 300px;        /* same width */
+      height: 200px;       /* same height */
+      object-fit: cover;   /* crop without distortion */
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
   }
     .hamburger{display:none}
     .hero{min-height:100vh;display:grid;align-items:center;padding:120px 0 80px;position:relative;overflow:hidden}
@@ -272,6 +271,7 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
 
 </body>
 </html>
+
 
 
 
