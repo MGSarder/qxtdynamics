@@ -16,12 +16,13 @@
     <priority>0.80</priority>
   </url>
 
-  <!-- Example: add more pages like this:
+  <!-- About me -->
   <url>
-    <loc>https://www.qxt.id.vn/another-page.html</loc>
+    <loc>https://www.qxt.id.vn/about.html</loc>
     <lastmod>2025-08-16</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.64</priority>
+    <priority>0.90</priority>
   </url>
   -->
 </urlset>
+
