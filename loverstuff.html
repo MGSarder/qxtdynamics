@@ -11,7 +11,7 @@
     body{margin:0;background:linear-gradient(180deg,var(--bg),#ffeef8 60%);color:#2b1330;display:flex;justify-content:center;padding:36px}
     .wrap{width:100%;max-width:var(--max-width)}
     header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    .title-block{display:flex;flex-direction:column;align-items:center;padding-left:300px}
+    .title-block{display:flex;flex-direction:column;align-items:center;padding-left:0px}
     header h1{margin:0;font-size:26px;letter-spacing:0.4px}
     header p{margin:4px 0 0;color:var(--muted);font-size:14px}
     .user-controls{display:flex;gap:8px;align-items:center}
@@ -80,19 +80,19 @@
         <div class="filewrap">
           <label class="filebtn" for="file">🌸 Chọn ảnh đi nà</label>
           <input id="file" type="file" accept="image/*" multiple>
-          <input id="caption" type="text" placeholder="Add a caption (optional)" maxlength="220">
+          <input id="caption" type="text" placeholder="Lói gì đi" maxlength="220">
         </div>
         <div id="preview" class="preview"></div>
-        <div class="note">You can choose multiple images. Click × on a thumbnail to remove. Max 20 files. Captions limited to 220 chars.</div>
+        <div class="note">Caption tối đa 220 kí tự hoy nha cục dàng</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:35px">
         <button id="postBtn" class="filebtn">Post ♥</button>
       </div>
     </section>
 
     <main id="feed" class="grid"></main>
 
-    <footer>Hosted with Supabase. Save as <code>index.html</code> and enable GitHub Pages.</footer>
+    <footer>Xa cách địa lý nhưng không xa cách <code>tình cảm</code> nhó 😼.</footer>
   </div>
 
   <!-- login modal -->
@@ -250,7 +250,7 @@
         if(error) throw error;
         feed.innerHTML = '';
         if(!posts || !posts.length){
-          feed.innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--muted)'>No posts yet 🌸</div>";
+          feed.innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--muted)'>Sao chưa đăng gì hết z ??? 🌸</div>";
           return;
         }
         const currentUser = loadUser();
