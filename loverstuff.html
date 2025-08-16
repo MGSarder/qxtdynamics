@@ -59,54 +59,66 @@
     .card:hover{transform:translateY(-6px);transition:transform 220ms ease}
     .filebtn:active{transform:translateY(1px)}
     @media (max-width:480px){body{padding:18px}.uploader{flex-direction:column;align-items:stretch}.title-block{align-items:center}}
-    /* UNDERLAY: sits under everything and never blocks clicks */
+    
+    /* ---------- Responsive underlay (keeps pictures visible and scales) ---------- */
     .underlay{
       position:fixed;
-      inset:0;                    /* full viewport */
-      pointer-events:none;        /* never block interactions */
-      z-index:0;                  /* below content */
+      inset:0;
+      pointer-events:none;
+      z-index:0;
       overflow:visible;
-      }
+    }
 
-    /* base styles for the decorations */
+    /* base styles: use clamp() so images scale smoothly with viewport */
     .underlay .u-img{
       position:absolute;
-      max-width:30vw;
-      width:auto;
-      opacity:0.95;
-      user-select:none;
-      pointer-events:none;
-      transition: transform .36s ease, opacity .36s ease;
+      width: clamp(72px, 12vw, 320px); /* min, preferred (vw), max */
+      height: auto;
+      opacity: 0.9;
+      user-select: none;
+      pointer-events: none;
+      transition: transform .28s ease, opacity .28s ease, width .28s ease;
       filter: drop-shadow(0 10px 30px rgba(0,0,0,0.06));
-        }
-
-      /* individual placement (tweak to taste) */
-    .underlay .u1{ left: 8px;  top: 60%;  transform: rotate(-5deg); max-width:120px; opacity:0.55; }
-    .underlay .u2{ left: 40%; top: 60%; transform: translateX(-50%) rotate(2deg); max-width:240px; opacity:0.55; }
-    .underlay .u3{ left: 90px; bottom: 30%; transform: rotate(-8deg); max-width:160px; opacity:0.55;}
-    .underlay .u4{ left: 46px; top: 20%; transform: rotate(4deg); max-width:160px; opacity:0.55;}
-    .underlay .u5{ right: 8px; bottom: 6%; transform: rotate(4deg); max-width:160px; opacity:0.55;}
-
-    /* make sure page content sits above the underlay */
-    .wrap, header, main, footer, .modal, .modal-backdrop { position: relative; z-index: 10; }
-
-    /* if you have fixed/floating elements that must go on top (modals, menus), give them a higher z-index */
-    .modal-backdrop { z-index: 1000; } 
-
-    /* hide underlay on very small screens */
-    @media (max-width:720px){
-      .underlay{ display:none; }
     }
+
+    /* positions expressed in % so they stay inside the viewport on small screens */
+    .underlay .u1{ left: 6%;  top: 60%;  transform: translateY(-50%) rotate(-5deg); max-width:180px; opacity:0.65; }
+    .underlay .u2{ left: 50%; top: 58%; transform: translate(-50%,-50%) rotate(2deg); width: clamp(120px, 42vw, 520px); opacity:0.55; } /* center hero */
+    .underlay .u3{ left: 10%; bottom: 28%; transform: translateY(0) rotate(-8deg); max-width:160px; opacity:0.65; }
+    .underlay .u4{ left: 8%; top: 18%; transform: rotate(4deg); max-width:160px; opacity:0.6; }
+    .underlay .u5{ right: 6%; bottom: 6%; transform: rotate(4deg); max-width:160px; opacity:0.6; }
+
+    /* MOBILE: shrink and nudge positions so they remain visible (do NOT hide) */
+    @media (max-width:720px){
+      .underlay .u-img{ width: clamp(48px, 18vw, 200px); opacity:0.85; }
+
+      /* move things a bit inward on narrow viewports */
+      .underlay .u1{ left: 8%; top: 6%; max-width:140px;opacity:0.6; }
+      .underlay .u2{ left: 50%; top: 88%; width: clamp(100px, 60vw, 360px); opacity:0.45; } /* make center less intrusive */
+      .underlay .u3{ left: 6%; bottom: 24%; max-width:120px;opacity:0.6; }
+      .underlay .u4{ left: 4%; top: 8%; max-width:120px;opacity:0.6; }
+      .underlay .u5{ right: 6%; bottom: 6%; max-width:120px;opacity:0.6; }
+
+      /* If you'd like to hide the largest decoration on tiny devices, uncomment:
+         .underlay .u2 { display:none; } */
+    }
+
+    /* ensure page content stacks above the underlay */
+    .wrap, header, main, footer, .modal, .modal-backdrop { position: relative; z-index: 10; }
+    .modal-backdrop { z-index: 1000; }
+
   </style>
 </head>
 <body>
   <div class="underlay" aria-hidden="true">
-  <img class="u-img u1" src="https://github.com/MGSarder/qxtdynamics/blob/main/1.jpg?raw=true" alt="">
-  <img class="u-img u2" src="https://github.com/MGSarder/qxtdynamics/blob/main/2.jpg?raw=true" alt="">
-  <img class="u-img u3" src="https://github.com/MGSarder/qxtdynamics/blob/main/3.jpg?raw=true" alt="">
-  <img class="u-img u4" src="https://github.com/MGSarder/qxtdynamics/blob/main/4.jpg?raw=true" alt="">
-  <img class="u-img u5" src="https://github.com/MGSarder/qxtdynamics/blob/main/5.jpg?raw=true" alt="">
-</div>
+    <!-- decorative images (replace these src with your own URLs if desired) -->
+    <img class="u-img u1" src="https://github.com/MGSarder/qxtdynamics/blob/main/1.jpg?raw=true" alt="">
+    <img class="u-img u2" src="https://github.com/MGSarder/qxtdynamics/blob/main/2.jpg?raw=true" alt="">
+    <img class="u-img u3" src="https://github.com/MGSarder/qxtdynamics/blob/main/3.jpg?raw=true" alt="">
+    <img class="u-img u4" src="https://github.com/MGSarder/qxtdynamics/blob/main/4.jpg?raw=true" alt="">
+    <img class="u-img u5" src="https://github.com/MGSarder/qxtdynamics/blob/main/5.jpg?raw=true" alt="">
+  </div>
+
   <div class="wrap">
     <header>
       <div class="title-block">
@@ -155,7 +167,7 @@
   <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // REPLACE these with your project details:
+    // REPLACE these with your project details (if you want to change):
     const SUPABASE_URL = "https://gfakpzqdsolzyihwwnvd.supabase.co";
     const SUPABASE_KEY = "sb_publishable_dFXVHx7R35VMP3NwftXT4g_iiYthAZZ";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
