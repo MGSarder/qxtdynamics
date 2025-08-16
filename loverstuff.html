@@ -3,92 +3,124 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mini Social Site</title>
+  <title>Mini Social Feed</title>
   <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #fafafa; }
-    h1 { text-align: center; }
-    form { margin-bottom: 20px; padding: 10px; background: #fff; border: 1px solid #ddd; border-radius: 8px; }
-    input, textarea { width: 100%; margin: 6px 0; padding: 8px; }
-    button { padding: 8px 12px; background: #007bff; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    .post { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-bottom: 15px; }
-    .post img { max-width: 100%; margin-top: 8px; border-radius: 6px; }
-    .comments { margin-top: 10px; padding-left: 10px; border-left: 3px solid #eee; }
-    .comment-form { margin-top: 8px; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #ffeef6;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #ff69b4;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 16px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    input, textarea, button {
+      width: 100%;
+      margin: 6px 0;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+    }
+    button {
+      background: #ff69b4;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover { background: #ff4fa2; }
+    .post {
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 12px;
+      margin: 14px 0;
+      background: #fff9fc;
+    }
+    .post img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 8px 0;
+    }
+    .comments {
+      margin-top: 10px;
+      padding-left: 10px;
+      border-left: 3px solid #ffb6d9;
+    }
+    .comment {
+      font-size: 0.9rem;
+      margin: 4px 0;
+    }
   </style>
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <h1>Mini Social Feed</h1>
+  <header>💖 Mini Social Feed</header>
 
-  <!-- Post Form -->
-  <form id="post-form">
-    <input type="text" id="author" placeholder="Your name" required />
-    <textarea id="caption" placeholder="Write a caption..." required></textarea>
-    <input type="file" id="image_file" accept="image/*" />
-    <button type="submit">Post</button>
-  </form>
+  <div class="container">
+    <h3>Make a Post</h3>
+    <input type="text" id="author" placeholder="Your name" />
+    <textarea id="caption" placeholder="Say something..."></textarea>
+    <input type="file" id="fileInput" accept="image/*" />
+    <button onclick="createPost()">Post</button>
+  </div>
 
-  <!-- Feed -->
-  <div id="feed"></div>
+  <div class="container">
+    <h3>Feed</h3>
+    <div id="feed"></div>
+  </div>
 
   <script>
-    // 🔑 Supabase init
-    const supabaseUrl = "YOUR_SUPABASE_URL";
-    const supabaseKey = "YOUR_SUPABASE_ANON_KEY";
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    // 🔑 Replace with your Supabase project keys
+    const SUPABASE_URL = "https://gfakpzqdsolzyihwwnvd.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtwenFkc29senlpaHd3bnZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzNjY2MDIsImV4cCI6MjA3MDk0MjYwMn0.KP7rVTNPijXYbcFZqrlVOokf0bOfqLmSBr-jqUpT4Fc";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const feedEl = document.getElementById("feed");
-
-    // Upload file to Supabase Storage and return public URL
-    async function uploadImage(file) {
-      if (!file) return null;
-
-      const fileName = `${Date.now()}-${file.name}`;
-      const { error } = await supabase.storage.from("post-images").upload(fileName, file);
-
-      if (error) {
-        console.error("Upload error:", error);
-        return null;
-      }
-
-      const { data } = supabase.storage.from("post-images").getPublicUrl(fileName);
-      return data.publicUrl;
-    }
-
-    // Create new post
-    document.getElementById("post-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const author = document.getElementById("author").value.trim();
+    async function createPost() {
+      const author = document.getElementById("author").value.trim() || "Anonymous";
       const caption = document.getElementById("caption").value.trim();
-      const file = document.getElementById("image_file").files[0];
+      const file = document.getElementById("fileInput").files[0];
 
-      if (!author || !caption) return alert("Name and caption are required!");
-
-      let image_url = null;
+      let imageUrl = null;
       if (file) {
-        image_url = await uploadImage(file);
+        // Upload to Supabase Storage
+        const filePath = `${author}/${Date.now()}-${file.name}`;
+        const { error: uploadError } = await supabase.storage.from("photos").upload(filePath, file);
+        if (uploadError) {
+          console.error(uploadError);
+          alert("Image upload failed");
+          return;
+        }
+        const { data: pub } = supabase.storage.from("photos").getPublicUrl(filePath);
+        imageUrl = pub.publicUrl;
       }
 
-      const { error } = await supabase.from("post").insert([{ author, caption, image_url }]);
+      // Insert into posts
+      const { error } = await supabase.from("posts").insert([{ author, caption, image_url: imageUrl }]);
       if (error) console.error(error);
       else {
         document.getElementById("caption").value = "";
-        document.getElementById("image_file").value = "";
+        document.getElementById("fileInput").value = "";
       }
-    });
-
-    // Add comment
-    async function addComment(postId, author, comment) {
-      const { error } = await supabase.from("comments").insert([{ post_id: postId, author, comment }]);
-      if (error) console.error(error);
     }
 
-    // Render feed
     async function loadFeed() {
       const { data: posts, error } = await supabase
-        .from("post")
-        .select("id, author, caption, image_url, created_at, comments(id, author, comment, created_at)")
+        .from("posts")
+        .select("id, author, caption, image_url, created_at, comments(id, author, text, created_at)")
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -96,48 +128,43 @@
         return;
       }
 
-      feedEl.innerHTML = "";
+      const feed = document.getElementById("feed");
+      feed.innerHTML = "";
+
       posts.forEach(post => {
         const postDiv = document.createElement("div");
         postDiv.className = "post";
         postDiv.innerHTML = `
-          <h3>${post.author}</h3>
+          <h4>${post.author}</h4>
           <p>${post.caption}</p>
-          ${post.image_url ? `<img src="${post.image_url}" alt="Post image">` : ""}
+          ${post.image_url ? `<img src="${post.image_url}" />` : ""}
           <div class="comments">
-            ${post.comments.map(c => `<p><b>${c.author}:</b> ${c.comment}</p>`).join("")}
+            ${post.comments.map(c => `<div class="comment"><b>${c.author}:</b> ${c.text}</div>`).join("")}
           </div>
-          <form class="comment-form" data-post="${post.id}">
-            <input type="text" name="author" placeholder="Your name" required />
-            <input type="text" name="comment" placeholder="Write a comment..." required />
-            <button type="submit">Comment</button>
-          </form>
+          <input type="text" placeholder="Write a comment..." id="comment-${post.id}" />
+          <button onclick="addComment('${post.id}')">Comment</button>
         `;
-        feedEl.appendChild(postDiv);
-      });
-
-      // Attach comment form handlers
-      document.querySelectorAll(".comment-form").forEach(form => {
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const postId = form.dataset.post;
-          const author = form.author.value.trim();
-          const comment = form.comment.value.trim();
-          if (!author || !comment) return;
-          await addComment(postId, author, comment);
-          form.comment.value = "";
-        });
+        feed.appendChild(postDiv);
       });
     }
 
-    // 🔄 Realtime updates for posts + comments
+    async function addComment(postId) {
+      const author = document.getElementById("author").value.trim() || "Anonymous";
+      const input = document.getElementById(`comment-${postId}`);
+      const text = input.value.trim();
+      if (!text) return;
+      const { error } = await supabase.from("comments").insert([{ post_id: postId, author, text }]);
+      if (error) console.error(error);
+      else input.value = "";
+    }
+
+    // Realtime subscription
     supabase
       .channel("realtime")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "post" }, () => loadFeed())
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "comments" }, () => loadFeed())
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "posts" }, loadFeed)
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "comments" }, loadFeed)
       .subscribe();
 
-    // Initial load
     loadFeed();
   </script>
 </body>
