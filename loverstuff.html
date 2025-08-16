@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Photo Wall — Pink & Cute</title>
+  <title>Góc nhỏ của Mụi và Max</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -20,9 +20,14 @@
     body{margin:0;background:linear-gradient(180deg,var(--bg),#ffeef8 60%);color:#2b1330;display:flex;justify-content:center;padding:36px}
     .wrap{width:100%;max-width:var(--max-width)}
 
-    header{display:flex;flex-direction:column;align-items:center;margin-bottom:18px}
-    header h1{margin:6px 0 2px;font-size:26px;letter-spacing:0.4px}
-    header p{margin:0;color:var(--muted);font-size:14px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .title-block{display:flex;flex-direction:column;align-items:flex-start}
+    header h1{margin:0;font-size:26px;letter-spacing:0.4px}
+    header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+
+    .user-controls{display:flex;gap:8px;align-items:center}
+    .user-chip{background:#fff1f8;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,140,190,0.18);font-weight:600;color:#5a1231}
+    .link-btn{background:transparent;border:0;color:#5a1231;cursor:pointer;font-weight:600}
 
     .uploader{background:linear-gradient(180deg,var(--card),#fff);padding:18px;border-radius:20px;box-shadow:var(--shadow);display:flex;gap:14px;align-items:center;border:1px solid rgba(255,140,190,0.18)}
     .uploader .left{flex:1}
@@ -32,6 +37,13 @@
     .uploader input[type="text"]{width:100%;padding:12px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb}
     .note{font-size:12px;color:var(--muted);margin-top:8px}
 
+    /* previews */
+    .preview{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .thumb{width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1px solid rgba(255,140,190,0.18);background:#fff}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb .remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.45);color:#fff;border-radius:999px;padding:2px 6px;cursor:pointer;font-size:12px}
+    .thumb .label{position:absolute;left:6px;bottom:6px;background:rgba(255,255,255,0.9);padding:2px 6px;border-radius:6px;font-size:11px}
+
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:22px}
     .card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border:1px solid rgba(255,140,190,0.08)}
     .imgwrap{position:relative}
@@ -39,11 +51,14 @@
     .heart{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.9);padding:8px;border-radius:999px;box-shadow:0 6px 18px rgba(255,105,180,0.08);cursor:pointer}
     .meta{padding:12px}
     .caption{margin:0 0 8px;font-weight:700;color:#3a0f2e}
+    .meta .meta-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .author{font-size:13px;color:#6a1a3a;font-weight:700}
     .time{font-size:12px;color:var(--muted);margin-bottom:8px}
     .comments{border-top:1px solid #fff0f4;padding:12px;background:linear-gradient(180deg,rgba(255,250,253,0.7),transparent)}
     .comment{font-size:13px;padding:8px 0;border-bottom:1px dashed rgba(255,180,210,0.25)}
     .comment:last-child{border-bottom:0}
     .comment small{display:block;color:var(--muted);font-size:11px}
+    .comment .c-author{font-weight:700;color:#6a1a3a}
     .comment-form{display:flex;gap:8px;margin-top:10px}
     .comment-form input{flex:1;padding:10px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb}
     .comment-form button{padding:10px 14px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;cursor:pointer}
@@ -53,59 +68,140 @@
 
     footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
 
+    /* Modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(20,10,20,0.4);display:flex;align-items:center;justify-content:center}
+    .modal{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);width:320px}
+    .modal h3{margin:0 0 8px}
+    .modal input{width:100%;padding:10px;border-radius:10px;border:1px solid #ffd6ec;margin-bottom:8px}
+    .modal .row{display:flex;gap:8px;align-items:center}
+
     /* Hover effects */
     .card:hover{transform:translateY(-6px);transition:transform 220ms ease}
     .filebtn:active{transform:translateY(1px)}
 
     /* Mobile */
-    @media (max-width:480px){body{padding:18px}.uploader{flex-direction:column;align-items:stretch}}
+    @media (max-width:480px){body{padding:18px}.uploader{flex-direction:column;align-items:stretch}.title-block{align-items:flex-start}}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <h1>♡ Photo Wall — Pink & Cute ♡</h1>
-      <p>Upload your sweetest moments, caption them, and let visitors leave cute comments — no login required.</p>
+      <div class="title-block">
+        <h1>♡ Góc nhỏ của Mụi và Max ♡</h1>
+        <p id="site-sub">Những con người dễ huông thì phải làm cho nó dễ huông chớ 😼.</p>
+      </div>
+
+      <div class="user-controls">
+        <div id="userDisplay" style="display:none" class="user-chip">Hi, <span id="userName">You</span></div>
+        <button id="loginBtn" class="link-btn">Log in</button>
+        <button id="logoutBtn" class="link-btn" style="display:none">Log out</button>
+      </div>
     </header>
 
     <section class="uploader" aria-label="uploader">
       <div class="left">
         <div class="filewrap">
-          <label class="filebtn" for="file">🌸 Choose Photo</label>
-          <input id="file" type="file" accept="image/*">
+          <label class="filebtn" for="file">🌸 Choose Photo(s)</label>
+          <input id="file" type="file" accept="image/*" multiple>
           <input id="caption" type="text" placeholder="Add a caption (optional)">
         </div>
-        <div class="note">Images are resized in the browser to keep things snappy. Saved to your browser's storage.</div>
+        <div id="preview" class="preview" aria-live="polite"></div>
+        <div class="note">You can choose multiple images. Click the little × on a thumbnail to remove before posting. Max 20 files.</div>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:40px">
         <button id="postBtn" class="filebtn">Post ♥</button>
-        <button id="exportBtn" class="btn-ghost">Export JSON</button>
-        <label class="btn-ghost" style="text-align:center;padding:8px;border-radius:8px;cursor:pointer">
-          Import
-          <input id="importFile" type="file" accept="application/json" style="display:none">
+
+        
+          
         </label>
       </div>
     </section>
 
     <main id="feed" class="grid" aria-live="polite"></main>
 
-    <footer>To host on GitHub Pages: save this file as <code>index.html</code> and enable Pages in your repo settings.</footer>
+  </div>
+
+  <!-- login modal (hidden) -->
+  <div id="loginModal" style="display:none" class="modal-backdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h3>Log in</h3>
+      <input id="loginName" placeholder="Your display name (e.g. Bunny)" maxlength="30">
+      <div class="row" style="margin-bottom:8px">
+        <label style="display:flex;align-items:center;gap:8px"><input id="rememberChk" type="checkbox"> Remember me</label>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button id="cancelLogin" class="btn-ghost">Cancel</button>
+        <button id="confirmLogin" class="filebtn">Save</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Functionality unchanged — just UI refreshed to pink & cute.
+    // Keys
     const STORAGE_KEY = 'photo_wall_posts_v1';
+    const USER_KEY = 'photo_wall_user_v1';
+
+    // Elements
     const fileInput = document.getElementById('file');
     const captionInput = document.getElementById('caption');
     const postBtn = document.getElementById('postBtn');
     const feed = document.getElementById('feed');
     const exportBtn = document.getElementById('exportBtn');
     const importFile = document.getElementById('importFile');
+    const preview = document.getElementById('preview');
 
-    // make the custom file button open the hidden input
-    document.querySelector('.filebtn[for="file"]')?.addEventListener('click', ()=> fileInput.click());
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userDisplay = document.getElementById('userDisplay');
+    const userNameSpan = document.getElementById('userName');
+    const loginModal = document.getElementById('loginModal');
+    const loginName = document.getElementById('loginName');
+    const rememberChk = document.getElementById('rememberChk');
+    const confirmLogin = document.getElementById('confirmLogin');
+    const cancelLogin = document.getElementById('cancelLogin');
 
+    // selected files array so we can remove before posting
+    let selectedFiles = [];
+
+    // user helpers: check sessionStorage first (temporary), then localStorage (remembered)
+    function loadUser(){
+      try{
+        const sess = sessionStorage.getItem(USER_KEY);
+        if(sess) return JSON.parse(sess);
+        const local = localStorage.getItem(USER_KEY);
+        if(local) return JSON.parse(local);
+        return null;
+      }catch(e){console.error(e); return null}
+    }
+    function saveUser(user, remember){
+      if(remember) localStorage.setItem(USER_KEY, JSON.stringify(user));
+      else sessionStorage.setItem(USER_KEY, JSON.stringify(user));
+      updateUserUi();
+    }
+    function clearUser(){
+      localStorage.removeItem(USER_KEY);
+      sessionStorage.removeItem(USER_KEY);
+      updateUserUi();
+    }
+
+    function updateUserUi(){
+      const u = loadUser();
+      if(u){
+        userDisplay.style.display = 'inline-flex';
+        userNameSpan.textContent = u.name;
+        loginBtn.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        document.getElementById('site-sub').textContent = 'Posting as: ' + u.name + ' — posts & comments will show your name.';
+      }else{
+        userDisplay.style.display = 'none';
+        loginBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        document.getElementById('site-sub').textContent = 'Những con người dễ huông thì phải làm cho nó dễ huông chớ 😼.';
+      }
+    }
+
+    // load/save posts
     function loadPosts(){
       try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : [];}catch(e){console.error(e); return []}
     }
@@ -147,8 +243,8 @@
             <div class="heart" title="cute">♥</div>
           </div>
           <div class="meta">
+            <div class="meta-top"><div class="author">${escapeHtml(post.author || 'Anonymous')}</div><div class="time">${new Date(post.createdAt).toLocaleString()}</div></div>
             <p class="caption">${escapeHtml(post.caption || '')}</p>
-            <div class="time">Posted: ${new Date(post.createdAt).toLocaleString()}</div>
             <div class="controls">
               <button class="btn-ghost" data-action="download">Download</button>
               <button class="btn-ghost" data-action="delete">Delete</button>
@@ -156,7 +252,7 @@
           </div>
           <div class="comments">
             <div class="comments-list">
-              ${post.comments.map(c=>`<div class="comment"><strong>${escapeHtml(c.text)}</strong><small>${new Date(c.createdAt).toLocaleString()}</small></div>`).join('')}
+              ${ (post.comments||[]).map(c=>`<div class="comment"><span class="c-author">${escapeHtml(c.author||'Anonymous')}</span>: <strong>${escapeHtml(c.text)}</strong><small>${new Date(c.createdAt).toLocaleString()}</small></div>`).join('') }
             </div>
             <form class="comment-form">
               <input placeholder="Write a cute comment..." required>
@@ -171,6 +267,9 @@
         });
         const deleteBtn = card.querySelector('[data-action="delete"]');
         deleteBtn.addEventListener('click', ()=>{
+          const current = loadUser();
+          // only allow delete if current user is author (or anonymous) — client-side only
+          if(current && post.author && current.name !== post.author){ if(!confirm('You are not the author. Delete anyway?')) return; }
           if(!confirm('Delete this post?')) return;
           const all = loadPosts();
           const idx = all.findIndex(p=>p.id===post.id);
@@ -186,8 +285,9 @@
           const all = loadPosts();
           const p = all.find(pp=>pp.id===post.id);
           if(!p) return;
+          const user = loadUser();
           p.comments = p.comments || [];
-          p.comments.push({text, createdAt: new Date().toISOString()});
+          p.comments.push({text, author: (user && user.name) ? user.name : 'Anonymous', createdAt: new Date().toISOString()});
           savePosts(all);
           input.value = '';
           render();
@@ -200,23 +300,72 @@
       }
     }
 
+    // preview helpers
+    function renderPreviews(){
+      preview.innerHTML = '';
+      selectedFiles.forEach((file, idx) => {
+        const el = document.createElement('div'); el.className = 'thumb';
+        const img = document.createElement('img'); img.src = URL.createObjectURL(file); img.alt = file.name;
+        const remove = document.createElement('div'); remove.className = 'remove'; remove.textContent = '×';
+        remove.title = 'Remove';
+        remove.addEventListener('click', ()=>{ removeFileAt(idx); });
+        const label = document.createElement('div'); label.className = 'label'; label.textContent = Math.round(file.size/1024) + 'KB';
+        el.appendChild(img); el.appendChild(remove); el.appendChild(label);
+        preview.appendChild(el);
+      });
+    }
+    function removeFileAt(idx){
+      selectedFiles.splice(idx,1);
+      updateFileInputFiles();
+      renderPreviews();
+    }
+    function updateFileInputFiles(){
+      // sync selectedFiles back to the file input using DataTransfer
+      try{
+        const dt = new DataTransfer();
+        selectedFiles.forEach(f => dt.items.add(f));
+        fileInput.files = dt.files;
+      }catch(e){
+        // fallback: can't set files (older browsers) — just clear input and warn
+        fileInput.value = '';
+      }
+    }
+
+    fileInput.addEventListener('change', (e)=>{
+      selectedFiles = Array.from(e.target.files).slice(0,20); // limit to 20
+      updateFileInputFiles();
+      renderPreviews();
+    });
+
+    // Posting (supports multiple files)
     postBtn.addEventListener('click', async ()=>{
-      const file = fileInput.files[0];
-      if(!file){alert('Please choose an image file.');return}
+      if(selectedFiles.length === 0){ alert('Please choose at least one image.'); return }
       postBtn.disabled = true; postBtn.textContent = 'Posting...';
       try{
-        const dataUrl = await readAndResize(file, 1200);
+        const results = await Promise.all(selectedFiles.map(f => readAndResize(f, 1200)));
         const posts = loadPosts();
-        const post = {id: String(Date.now()) + Math.random().toString(36).slice(2,8), dataUrl, caption: captionInput.value.trim(), comments: [], createdAt: new Date().toISOString()};
-        posts.push(post);
+        const user = loadUser();
+        const newPosts = results.map(dataUrl => ({
+          id: String(Date.now()) + Math.random().toString(36).slice(2,8),
+          dataUrl,
+          caption: captionInput.value.trim(),
+          comments: [],
+          createdAt: new Date().toISOString(),
+          author: (user && user.name) ? user.name : 'Anonymous'
+        }));
+        posts.push(...newPosts);
         savePosts(posts);
+        // clear selection
+        selectedFiles = [];
         fileInput.value = '';
         captionInput.value = '';
+        renderPreviews();
         render();
-      }catch(err){console.error(err); alert('Failed to read image.')}
+      }catch(err){console.error(err); alert('Failed to read one or more images.')}
       finally{postBtn.disabled = false; postBtn.textContent = 'Post ♥'}
     });
 
+    // Export / Import
     exportBtn.addEventListener('click', ()=>{
       const posts = loadPosts();
       const blob = new Blob([JSON.stringify(posts, null, 2)], {type:'application/json'});
@@ -240,8 +389,33 @@
       finally{importFile.value=''}
     });
 
+    // Login controls
+    loginBtn.addEventListener('click', ()=>{
+      loginName.value = '';
+      rememberChk.checked = true;
+      loginModal.style.display = 'flex';
+    });
+    cancelLogin.addEventListener('click', ()=> loginModal.style.display = 'none');
+    confirmLogin.addEventListener('click', ()=>{
+      const name = (loginName.value || '').trim();
+      if(!name){ alert('Please enter a display name.'); return; }
+      const remember = rememberChk.checked;
+      saveUser({name}, remember);
+      loginModal.style.display = 'none';
+      render();
+    });
+
+    logoutBtn.addEventListener('click', ()=>{
+      if(!confirm('Log out?')) return;
+      clearUser();
+      render();
+    });
+
+    // helpers
     function escapeHtml(s){ return (s||'').replace(/[&<>\"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
 
+    // initialize UI and render
+    updateUserUi();
     render();
   </script>
 </body>
