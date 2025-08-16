@@ -224,22 +224,48 @@
     }
 
     // Upload to Apps Script -> Drive
-    async function uploadToDrive(dataUrl, filename){
-      const payload = { data: dataUrl, filename: filename || ('photo-' + Date.now() + '.jpg') };
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if(!res.ok){
-        const txt = await res.text();
-        throw new Error('Upload failed: ' + res.status + ' ' + txt);
-      }
-      const json = await res.json();
-      if(!json.success) throw new Error('Upload error: ' + (json.error || 'unknown'));
-      // expected { success: true, id: '<fileId>', url: 'https://drive.google.com/uc?export=view&id=...' }
-      return json;
+    // Replace your existing uploadToDrive with this
+async function uploadToDrive(dataUrl, filename){
+  // quick sanity
+  if(!APPS_SCRIPT_URL || APPS_SCRIPT_URL.includes('XXXXXXXX')) {
+    throw new Error('APPS_SCRIPT_URL not set — paste your deployed Apps Script URL into the APPS_SCRIPT_URL constant.');
+  }
+
+  try {
+    const fd = new FormData();
+    fd.append('data', dataUrl);
+    fd.append('filename', filename || ('photo-' + Date.now() + '.jpg'));
+
+    // NOTE: do NOT set Content-Type header for FormData (browser will add boundary).
+    const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: fd });
+
+    // network-level check
+    if (!res.ok) {
+      const txt = await res.text().catch(()=>'<no-body>');
+      console.error('Drive upload returned non-OK:', res.status, txt);
+      throw new Error('Upload failed: ' + res.status + ' — see console Network/Response for details.');
     }
+
+    const text = await res.text();
+    // try to parse JSON (Apps Script returns JSON)
+    try {
+      const json = JSON.parse(text);
+      if (!json.success) {
+        console.error('Drive upload JSON error:', json);
+        throw new Error('Upload error: ' + (json.error || 'unknown'));
+      }
+      return json; // expected { success:true, id, url }
+    } catch (parseErr) {
+      console.error('Drive upload: failed to parse JSON response:', text);
+      throw new Error('Upload failed: invalid server response (see console).');
+    }
+  } catch (err) {
+    console.error('uploadToDrive error:', err);
+    // rethrow to show in UI
+    throw err;
+  }
+}
+
 
     // Preview helpers (same UI)
     function renderPreviews(){
