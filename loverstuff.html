@@ -107,9 +107,11 @@
           });
 
         if (uploadError) {
-          console.error(uploadError);
-          alert("Image upload failed");
-          return;
+        console.error("Upload error:", uploadError.message);
+        alert("Image upload failed: " + uploadError.message);
+        return;
+        }
+
         }
         const { data } = supabase.storage.from("photos").getPublicUrl(filePath);
         imageUrl = data.publicUrl;  // ✅ correct
