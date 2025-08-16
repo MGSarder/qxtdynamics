@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Góc nhỏ của Mụi và Max</title>
+  <title>Photo Wall — Pink & Cute</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -62,6 +62,8 @@
     .comment-form{display:flex;gap:8px;margin-top:10px}
     .comment-form input{flex:1;padding:10px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb}
     .comment-form button{padding:10px 14px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;cursor:pointer}
+    .commenting-as{font-size:12px;color:#6a1a3a;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .commenting-as strong{background:#fff1f8;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,140,190,0.18)}
 
     .controls{display:flex;gap:8px;margin-top:8px}
     .btn-ghost{background:transparent;border:1px dashed rgba(255,140,190,0.25);padding:8px;border-radius:10px;cursor:pointer;color:#7a3750}
@@ -70,7 +72,7 @@
 
     /* Modal */
     .modal-backdrop{position:fixed;inset:0;background:rgba(20,10,20,0.4);display:flex;align-items:center;justify-content:center}
-    .modal{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);width:320px}
+    .modal{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);width:300px}
     .modal h3{margin:0 0 8px}
     .modal input{width:100%;padding:10px;border-radius:10px;border:1px solid #ffd6ec;margin-bottom:8px}
     .modal .row{display:flex;gap:8px;align-items:center}
@@ -87,8 +89,8 @@
   <div class="wrap">
     <header>
       <div class="title-block">
-        <h1>♡ Góc nhỏ của Mụi và Max ♡</h1>
-        <p id="site-sub">Những con người dễ huông thì phải làm cho nó dễ huông chớ 😼.</p>
+        <h1>♡ Photo Wall — Pink & Cute ♡</h1>
+        <p id="site-sub">Upload your sweetest moments, caption them, and let visitors leave cute comments.</p>
       </div>
 
       <div class="user-controls">
@@ -109,27 +111,26 @@
         <div class="note">You can choose multiple images. Click the little × on a thumbnail to remove before posting. Max 20 files.</div>
       </div>
 
-      <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:40px">
+      <div style="display:flex;flex-direction:column;gap:8px">
         <button id="postBtn" class="filebtn">Post ♥</button>
-
-        
-          
+        <button id="exportBtn" class="btn-ghost">Export JSON</button>
+        <label class="btn-ghost" style="text-align:center;padding:8px;border-radius:8px;cursor:pointer">
+          Import
+          <input id="importFile" type="file" accept="application/json" style="display:none">
         </label>
       </div>
     </section>
 
     <main id="feed" class="grid" aria-live="polite"></main>
 
+    <footer>To host on GitHub Pages: save this file as <code>index.html</code> and enable Pages in your repo settings.</footer>
   </div>
 
-  <!-- login modal (hidden) -->
+  <!-- simplified login modal (name only, no password, auto-remember) -->
   <div id="loginModal" style="display:none" class="modal-backdrop" role="dialog" aria-modal="true">
-    <div class="modal">
-      <h3>Log in</h3>
-      <input id="loginName" placeholder="Your display name (e.g. Bunny)" maxlength="30">
-      <div class="row" style="margin-bottom:8px">
-        <label style="display:flex;align-items:center;gap:8px"><input id="rememberChk" type="checkbox"> Remember me</label>
-      </div>
+    <div class="modal" role="document">
+      <h3>Enter your display name</h3>
+      <input id="loginName" placeholder="Your name (e.g. Bunny)" maxlength="30" autocomplete="name">
       <div style="display:flex;gap:8px;justify-content:flex-end">
         <button id="cancelLogin" class="btn-ghost">Cancel</button>
         <button id="confirmLogin" class="filebtn">Save</button>
@@ -157,7 +158,6 @@
     const userNameSpan = document.getElementById('userName');
     const loginModal = document.getElementById('loginModal');
     const loginName = document.getElementById('loginName');
-    const rememberChk = document.getElementById('rememberChk');
     const confirmLogin = document.getElementById('confirmLogin');
     const cancelLogin = document.getElementById('cancelLogin');
 
@@ -174,7 +174,8 @@
         return null;
       }catch(e){console.error(e); return null}
     }
-    function saveUser(user, remember){
+    function saveUser(user, remember=true){
+      // default: remember so user won't need to re-login
       if(remember) localStorage.setItem(USER_KEY, JSON.stringify(user));
       else sessionStorage.setItem(USER_KEY, JSON.stringify(user));
       updateUserUi();
@@ -197,7 +198,7 @@
         userDisplay.style.display = 'none';
         loginBtn.style.display = 'inline-block';
         logoutBtn.style.display = 'none';
-        document.getElementById('site-sub').textContent = 'Những con người dễ huông thì phải làm cho nó dễ huông chớ 😼.';
+        document.getElementById('site-sub').textContent = 'Upload your sweetest moments, caption them, and let visitors leave cute comments.';
       }
     }
 
@@ -233,6 +234,7 @@
 
     function render(){
       const posts = loadPosts();
+      const currentUser = loadUser();
       feed.innerHTML = '';
       posts.slice().reverse().forEach(post => {
         const card = document.createElement('article');
@@ -254,8 +256,9 @@
             <div class="comments-list">
               ${ (post.comments||[]).map(c=>`<div class="comment"><span class="c-author">${escapeHtml(c.author||'Anonymous')}</span>: <strong>${escapeHtml(c.text)}</strong><small>${new Date(c.createdAt).toLocaleString()}</small></div>`).join('') }
             </div>
+            <div class="commenting-as">Commenting as: <strong>${escapeHtml((currentUser && currentUser.name) ? currentUser.name : 'Anonymous')}</strong></div>
             <form class="comment-form">
-              <input placeholder="Write a cute comment..." required>
+              <input placeholder="Write a cute comment as ${escapeHtml((currentUser && currentUser.name) ? currentUser.name : 'Anonymous')}..." required>
               <button type="submit">Comment</button>
             </form>
           </div>
@@ -389,21 +392,25 @@
       finally{importFile.value=''}
     });
 
-    // Login controls
+    // Login controls (simplified: name only, no password)
     loginBtn.addEventListener('click', ()=>{
       loginName.value = '';
-      rememberChk.checked = true;
       loginModal.style.display = 'flex';
+      setTimeout(()=>loginName.focus(), 50);
     });
     cancelLogin.addEventListener('click', ()=> loginModal.style.display = 'none');
     confirmLogin.addEventListener('click', ()=>{
       const name = (loginName.value || '').trim();
       if(!name){ alert('Please enter a display name.'); return; }
-      const remember = rememberChk.checked;
-      saveUser({name}, remember);
+      // default to remembering the user so they don't have to log in again
+      saveUser({name}, true);
       loginModal.style.display = 'none';
       render();
     });
+    // allow submit by pressing Enter and close modal by clicking outside or pressing Escape
+    loginName.addEventListener('keydown', e => { if(e.key === 'Enter') confirmLogin.click(); });
+    loginModal.addEventListener('click', e => { if(e.target === loginModal) loginModal.style.display = 'none'; });
+    document.addEventListener('keydown', e => { if(e.key === 'Escape') loginModal.style.display = 'none'; });
 
     logoutBtn.addEventListener('click', ()=>{
       if(!confirm('Log out?')) return;
