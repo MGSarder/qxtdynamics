@@ -3,178 +3,317 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mini Social Feed</title>
+  <title>Photo Wall — Pink & Cute (Global)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #ffeef6;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #ff69b4;
-      color: white;
-      text-align: center;
-      padding: 1rem;
-      font-size: 1.4rem;
-      font-weight: bold;
-    }
-    .container {
-      max-width: 600px;
-      margin: 20px auto;
-      padding: 16px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    input, textarea, button {
-      width: 100%;
-      margin: 6px 0;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ddd;
-      font-size: 1rem;
-    }
-    button {
-      background: #ff69b4;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-    }
-    button:hover { background: #ff4fa2; }
-    .post {
-      border: 1px solid #eee;
-      border-radius: 12px;
-      padding: 12px;
-      margin: 14px 0;
-      background: #fff9fc;
-    }
-    .post img {
-      max-width: 100%;
-      border-radius: 8px;
-      margin: 8px 0;
-    }
-    .comments {
-      margin-top: 10px;
-      padding-left: 10px;
-      border-left: 3px solid #ffb6d9;
-    }
-    .comment {
-      font-size: 0.9rem;
-      margin: 4px 0;
-    }
+    :root{ --bg:#fff0f6; --card:#ffffff; --muted:#b86b87; --accent:#ff6bcb; --accent-2:#ff9ad5; --shadow: 0 10px 30px rgba(255,105,180,0.08); --max-width:980px; font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#ffeef8 60%);color:#2b1330;display:flex;justify-content:center;padding:36px}
+    .wrap{width:100%;max-width:var(--max-width)}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .title-block{display:flex;flex-direction:column;align-items:flex-start}
+    header h1{margin:0;font-size:26px;letter-spacing:0.4px}
+    header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+    .user-controls{display:flex;gap:8px;align-items:center}
+    .user-chip{background:#fff1f8;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,140,190,0.18);font-weight:600;color:#5a1231}
+    .link-btn{background:transparent;border:0;color:#5a1231;cursor:pointer;font-weight:600}
+    .uploader{background:linear-gradient(180deg,var(--card),#fff);padding:18px;border-radius:20px;box-shadow:var(--shadow);display:flex;gap:14px;align-items:center;border:1px solid rgba(255,140,190,0.18)}
+    .uploader .left{flex:1}
+    .filewrap{display:flex;gap:12px;align-items:center}
+    .filebtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:0;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(255,105,180,0.14)}
+    .uploader input[type="file"]{display:none}
+    .uploader input[type="text"]{width:100%;padding:12px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb}
+    .note{font-size:12px;color:var(--muted);margin-top:8px}
+    .preview{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .thumb{width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1px solid rgba(255,140,190,0.18);background:#fff}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .thumb .remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.45);color:#fff;border-radius:999px;padding:2px 6px;cursor:pointer;font-size:12px}
+    .thumb .label{position:absolute;left:6px;bottom:6px;background:rgba(255,255,255,0.9);padding:2px 6px;border-radius:6px;font-size:11px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:22px}
+    .card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border:1px solid rgba(255,140,190,0.08)}
+    .imgwrap{position:relative}
+    .card img{width:100%;height:auto;display:block;object-fit:cover}
+    .heart{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.9);padding:8px;border-radius:999px;box-shadow:0 6px 18px rgba(255,105,180,0.08);cursor:pointer}
+    .meta{padding:12px}
+    .caption{margin:0 0 8px;font-weight:700;color:#3a0f2e}
+    .meta .meta-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .author{font-size:13px;color:#6a1a3a;font-weight:700}
+    .time{font-size:12px;color:var(--muted);margin-bottom:8px}
+    .comments{border-top:1px solid #fff0f4;padding:12px;background:linear-gradient(180deg,rgba(255,250,253,0.7),transparent)}
+    .comment{font-size:13px;padding:8px 0;border-bottom:1px dashed rgba(255,180,210,0.25)}
+    .comment:last-child{border-bottom:0}
+    .comment small{display:block;color:var(--muted);font-size:11px}
+    .comment .c-author{font-weight:700;color:#6a1a3a}
+    .comment-form{display:flex;gap:8px;margin-top:10px}
+    .comment-form input{flex:1;padding:10px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb}
+    .comment-form button{padding:10px 14px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;cursor:pointer}
+    .commenting-as{font-size:12px;color:#6a1a3a;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .commenting-as strong{background:#fff1f8;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,140,190,0.18)}
+    .controls{display:flex;gap:8px;margin-top:8px}
+    .btn-ghost{background:transparent;border:1px dashed rgba(255,140,190,0.25);padding:8px;border-radius:10px;cursor:pointer;color:#7a3750}
+    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(20,10,20,0.4);display:flex;align-items:center;justify-content:center}
+    .modal{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);width:300px}
+    .modal h3{margin:0 0 8px}
+    .modal input{width:100%;padding:10px;border-radius:10px;border:1px solid #ffd6ec;margin-bottom:8px}
+    .card:hover{transform:translateY(-6px);transition:transform 220ms ease}
+    .filebtn:active{transform:translateY(1px)}
+    @media (max-width:480px){body{padding:18px}.uploader{flex-direction:column;align-items:stretch}.title-block{align-items:flex-start}}
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <header>💖 Mini Social Feed</header>
+  <div class="wrap">
+    <header>
+      <div class="title-block">
+        <h1>♡ Photo Wall — Pink & Cute ♡</h1>
+        <p id="site-sub">Upload your sweetest moments, caption them, and let visitors leave cute comments.</p>
+      </div>
+      <div class="user-controls">
+        <div id="userDisplay" style="display:none" class="user-chip">Hi, <span id="userName">You</span></div>
+        <button id="loginBtn" class="link-btn">Log in</button>
+        <button id="logoutBtn" class="link-btn" style="display:none">Log out</button>
+      </div>
+    </header>
 
-  <div class="container">
-    <h3>Make a Post</h3>
-    <input type="text" id="author" placeholder="Your name" />
-    <textarea id="caption" placeholder="Say something..."></textarea>
-    <input type="file" id="fileInput" accept="image/*" />
-    <button onclick="createPost()">Post</button>
+    <section class="uploader">
+      <div class="left">
+        <div class="filewrap">
+          <label class="filebtn" for="file">🌸 Choose Photo(s)</label>
+          <input id="file" type="file" accept="image/*" multiple>
+          <input id="caption" type="text" placeholder="Add a caption (optional)" maxlength="220">
+        </div>
+        <div id="preview" class="preview"></div>
+        <div class="note">You can choose multiple images. Click × on a thumbnail to remove. Max 20 files. Captions limited to 220 chars.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button id="postBtn" class="filebtn">Post ♥</button>
+      </div>
+    </section>
+
+    <main id="feed" class="grid"></main>
+
+    <footer>Hosted with Supabase. Save as <code>index.html</code> and enable GitHub Pages.</footer>
   </div>
 
-  <div class="container">
-    <h3>Feed</h3>
-    <div id="feed"></div>
+  <!-- login modal -->
+  <div id="loginModal" style="display:none" class="modal-backdrop">
+    <div class="modal">
+      <h3>Enter your display name</h3>
+      <input id="loginName" placeholder="Your name (e.g. Bunny)" maxlength="30">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button id="cancelLogin" class="btn-ghost">Cancel</button>
+        <button id="confirmLogin" class="filebtn">Save</button>
+      </div>
+    </div>
   </div>
 
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // 🔑 Replace with your Supabase project keys
+    // REPLACE these with your project details:
     const SUPABASE_URL = "https://gfakpzqdsolzyihwwnvd.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtwenFkc29senlpaHd3bnZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzNjY2MDIsImV4cCI6MjA3MDk0MjYwMn0.KP7rVTNPijXYbcFZqrlVOokf0bOfqLmSBr-jqUpT4Fc";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_KEY = "sb_publishable_dFXVHx7R35VMP3NwftXT4g_iiYthAZZ";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    async function createPost() {
-      const author = document.getElementById("author").value.trim() || "Anonymous";
-      const caption = document.getElementById("caption").value.trim();
-      const file = document.getElementById("fileInput").files[0];
+    const fileInput = document.getElementById('file');
+    const captionInput = document.getElementById('caption');
+    const postBtn = document.getElementById('postBtn');
+    const feed = document.getElementById('feed');
+    const preview = document.getElementById('preview');
 
-      let imageUrl = null;
-      if (file) {
-        // Upload to Supabase Storage
-        const filePath = `${author}/${Date.now()}-${file.name}`;
-        const { error: uploadError } = await supabase.storage
-        .from("photos")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: file.type
-          });
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userDisplay = document.getElementById('userDisplay');
+    const userNameSpan = document.getElementById('userName');
+    const loginModal = document.getElementById('loginModal');
+    const loginName = document.getElementById('loginName');
+    const confirmLogin = document.getElementById('confirmLogin');
+    const cancelLogin = document.getElementById('cancelLogin');
 
-        if (uploadError) {
-        console.error("Upload error:", uploadError.message);
-        alert("Image upload failed: " + uploadError.message);
-        return;
-        }
+    // selectedFiles will be an array of { file, url, sizeKB }
+    let selectedFiles = [];
+    const USER_KEY = 'photo_wall_user_v1';
+    const MAX_FILES = 20;
 
-        }
-        const { data } = supabase.storage.from("photos").getPublicUrl(filePath);
-        imageUrl = data.publicUrl;  // ✅ correct
+    function loadUser(){ try{ return JSON.parse(localStorage.getItem(USER_KEY)) }catch{return null} }
+    function saveUser(u){ localStorage.setItem(USER_KEY, JSON.stringify(u)); updateUserUi(); }
+    function clearUser(){ localStorage.removeItem(USER_KEY); updateUserUi(); }
+    function updateUserUi(){ const u=loadUser(); if(u){ userDisplay.style.display='inline-flex'; userNameSpan.textContent=u.name; loginBtn.style.display='none'; logoutBtn.style.display='inline-block'; document.getElementById('site-sub').textContent = 'Posting as: ' + u.name; } else { userDisplay.style.display='none'; loginBtn.style.display='inline-block'; logoutBtn.style.display='none'; document.getElementById('site-sub').textContent='Upload your sweetest moments, caption them, and let visitors comment.'; } }
 
-      }
+    // small helper: safe HTML escaping
+    function escapeHtml(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
 
-      // Insert into posts
-      const { error } = await supabase.from("posts").insert([{ author, caption, image_url: imageUrl }]);
-      if (error) console.error(error);
-      else {
-        document.getElementById("caption").value = "";
-        document.getElementById("fileInput").value = "";
-      }
+    // create per-file object urls and keep track so we can revoke
+    function createPreviewList(files){
+      // revoke any previous object URLs first
+      selectedFiles.forEach(f=>{ if(f.url) URL.revokeObjectURL(f.url); });
+      selectedFiles = Array.from(files).slice(0, MAX_FILES).map(f=>({
+        file: f,
+        url: URL.createObjectURL(f),
+        sizeKB: Math.round(f.size/1024)
+      }));
+      renderPreviews();
     }
 
-    async function loadFeed() {
-      const { data: posts, error } = await supabase
-        .from("posts")
-        .select("id, author, caption, image_url, created_at, comments(id, author, text, created_at)")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      const feed = document.getElementById("feed");
-      feed.innerHTML = "";
-
-      posts.forEach(post => {
-        const postDiv = document.createElement("div");
-        postDiv.className = "post";
-        postDiv.innerHTML = `
-          <h4>${post.author}</h4>
-          <p>${post.caption}</p>
-          ${post.image_url ? `<img src="${post.image_url}" />` : ""}
-          <div class="comments">
-            ${post.comments.map(c => `<div class="comment"><b>${c.author}:</b> ${c.text}</div>`).join("")}
-          </div>
-          <input type="text" placeholder="Write a comment..." id="comment-${post.id}" />
-          <button onclick="addComment('${post.id}')">Comment</button>
-        `;
-        feed.appendChild(postDiv);
+    function renderPreviews(){
+      preview.innerHTML='';
+      selectedFiles.forEach((entry, idx)=>{
+        const el=document.createElement('div'); el.className='thumb';
+        el.innerHTML=`<img src="${entry.url}"><div class="remove">×</div><div class="label">${entry.sizeKB}KB</div>`;
+        el.querySelector('.remove').onclick=()=>{ 
+          // revoke URL and remove from list
+          if(entry.url) URL.revokeObjectURL(entry.url);
+          selectedFiles.splice(idx,1); renderPreviews();
+        };
+        preview.appendChild(el);
       });
     }
 
-    async function addComment(postId) {
-      const author = document.getElementById("author").value.trim() || "Anonymous";
-      const input = document.getElementById(`comment-${postId}`);
-      const text = input.value.trim();
-      if (!text) return;
-      const { error } = await supabase.from("comments").insert([{ post_id: postId, author, text }]);
-      if (error) console.error(error);
-      else input.value = "";
+    fileInput.onchange = e => {
+      const files = e.target.files;
+      if(!files || !files.length) return;
+      // Optional: you can filter by size/type here
+      createPreviewList(files);
+    };
+
+    // safe filename using UUID (fallback to random if not available)
+    function makeFilename(originalName){
+      const ext = (originalName.match(/\.[^.]+$/)||[''])[0];
+      let id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2,10);
+      return `${Date.now()}-${id}${ext}`;
     }
 
-    // Realtime subscription
-    supabase
-      .channel("realtime")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "posts" }, loadFeed)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "comments" }, loadFeed)
-      .subscribe();
+    async function uploadFileToStorage(file){
+      const path = makeFilename(file.name);
+      const { data, error } = await supabase.storage.from("photos").upload(path, file, { cacheControl: '3600', upsert: false });
+      if(error) throw error;
+      // getPublicUrl returns { data: { publicUrl } }
+      const { data: pub } = supabase.storage.from("photos").getPublicUrl(data.path);
+      if(!pub || !pub.publicUrl) throw new Error("Failed to get public URL");
+      return pub.publicUrl;
+    }
 
+    async function uploadFileAndInsert(file, caption, author){
+      const publicUrl = await uploadFileToStorage(file);
+      const { error } = await supabase.from("posts").insert([{ author, caption, image_url: publicUrl }]);
+      if(error) throw error;
+      return publicUrl;
+    }
+
+    postBtn.onclick = async () => {
+      if(!selectedFiles.length){ alert("Choose a photo first!"); return; }
+      if(!SUPABASE_URL.includes("YOUR_PROJECT") && !SUPABASE_KEY.includes("YOUR_ANON_KEY")) {
+        // fine
+      } else {
+        // if developer forgot to replace keys, warn but still attempt
+        console.warn("Make sure to replace SUPABASE_URL and SUPABASE_KEY with real values.");
+      }
+
+      postBtn.disabled = true;
+      const origText = postBtn.textContent;
+      postBtn.textContent = "Posting...";
+
+      try {
+        const user = loadUser();
+        const author = user ? user.name : "Anonymous";
+        const caption = captionInput.value.trim().slice(0, 220);
+
+        // sequential upload to avoid hammering, but you can parallelize if desired
+        for(const entry of selectedFiles){
+          await uploadFileAndInsert(entry.file, caption, author);
+          // revoke preview url for that file
+          if(entry.url) URL.revokeObjectURL(entry.url);
+        }
+
+        // clear UI
+        selectedFiles = [];
+        fileInput.value = '';
+        captionInput.value = '';
+        renderPreviews();
+        await loadFeed();
+      } catch (err) {
+        console.error(err);
+        alert("Upload failed: " + (err.message || err));
+      } finally {
+        postBtn.disabled = false;
+        postBtn.textContent = origText;
+      }
+    };
+
+    async function loadFeed(){
+      feed.innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--muted)'>Loading...</div>";
+      try {
+        const { data: posts, error } = await supabase
+          .from("posts")
+          .select("id,author,caption,image_url,created_at,comments(id,author,text,created_at)")
+          .order("created_at", { ascending: false });
+        if(error) throw error;
+        feed.innerHTML = '';
+        if(!posts || !posts.length){
+          feed.innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--muted)'>No posts yet 🌸</div>";
+          return;
+        }
+        const currentUser = loadUser();
+        posts.forEach(p=>{
+          const card = document.createElement('article'); card.className='card';
+          card.innerHTML = `
+            <div class="imgwrap"><img src="${escapeHtml(p.image_url)}"><div class="heart" title="Like">♥</div></div>
+            <div class="meta">
+              <div class="meta-top"><div class="author">${escapeHtml(p.author)}</div><div class="time">${new Date(p.created_at).toLocaleString()}</div></div>
+              <p class="caption">${escapeHtml(p.caption||"")}</p>
+              <div class="controls"><button class="btn-ghost" data-dl>Download</button></div>
+            </div>
+            <div class="comments">
+              <div class="comments-list"></div>
+              <div class="commenting-as">Commenting as: <strong>${escapeHtml(currentUser?.name||"Anonymous")}</strong></div>
+              <form class="comment-form"><input required placeholder="Write a comment..."><button>Comment</button></form>
+            </div>`;
+          const list = card.querySelector('.comments-list');
+          (p.comments||[]).forEach(c=>{
+            const el = document.createElement('div'); el.className='comment';
+            el.innerHTML = `<span class="c-author">${escapeHtml(c.author)}</span>: ${escapeHtml(c.text)}<small>${new Date(c.created_at).toLocaleString()}</small>`;
+            list.appendChild(el);
+          });
+          card.querySelector('[data-dl]').onclick = () => { const a = document.createElement('a'); a.href = p.image_url; a.download = "photo.jpg"; a.click(); };
+          card.querySelector('.comment-form').onsubmit = async e => {
+            e.preventDefault();
+            const input = e.target.querySelector('input');
+            const t = input.value.trim();
+            if(!t) return;
+            try {
+              const author = currentUser?.name || "Anonymous";
+              await supabase.from("comments").insert([{ post_id: p.id, author, text: t }]);
+              input.value = '';
+              await loadFeed();
+            } catch(err) {
+              console.error(err);
+              alert("Failed to post comment: " + (err.message || err));
+            }
+          };
+          feed.appendChild(card);
+        });
+      } catch(err) {
+        console.error(err);
+        feed.innerHTML = "<div style='color:red'>Failed to load feed</div>";
+      }
+    }
+
+    // Realtime subscriptions for posts and comments
+    try {
+      supabase.channel('realtime')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => loadFeed())
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'comments' }, () => loadFeed())
+        .subscribe();
+    } catch(e) { console.warn("Realtime subscription error:", e); }
+
+    // login modal
+    loginBtn.onclick = ()=>{ loginName.value=''; loginModal.style.display='flex'; setTimeout(()=>loginName.focus(),50); }
+    cancelLogin.onclick = ()=> loginModal.style.display='none';
+    confirmLogin.onclick = ()=>{ const n = loginName.value.trim(); if(!n){ alert("Enter a name"); return } saveUser({name:n}); loginModal.style.display='none'; }
+    logoutBtn.onclick = ()=>{ if(confirm("Log out?")) clearUser(); }
+
+    // init
+    updateUserUi();
     loadFeed();
   </script>
 </body>
