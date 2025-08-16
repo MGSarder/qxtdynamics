@@ -3,32 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Photo Wall — Pink & Cute</title>
+  <title>Photo Wall — Pink & Cute (Global)</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --bg:#fff0f6; /* soft pink */
-      --card:#ffffff;
-      --muted:#b86b87;
-      --accent:#ff6bcb; /* bright pink */
-      --accent-2:#ff9ad5; /* lighter pink */
-      --shadow: 0 10px 30px rgba(255,105,180,0.08);
-      --max-width:980px;
-      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-    }
+    :root{ --bg:#fff0f6; --card:#ffffff; --muted:#b86b87; --accent:#ff6bcb; --accent-2:#ff9ad5; --shadow: 0 10px 30px rgba(255,105,180,0.08); --max-width:980px; font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
     *{box-sizing:border-box}
     body{margin:0;background:linear-gradient(180deg,var(--bg),#ffeef8 60%);color:#2b1330;display:flex;justify-content:center;padding:36px}
     .wrap{width:100%;max-width:var(--max-width)}
-
     header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
     .title-block{display:flex;flex-direction:column;align-items:flex-start}
     header h1{margin:0;font-size:26px;letter-spacing:0.4px}
     header p{margin:4px 0 0;color:var(--muted);font-size:14px}
-
     .user-controls{display:flex;gap:8px;align-items:center}
     .user-chip{background:#fff1f8;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,140,190,0.18);font-weight:600;color:#5a1231}
     .link-btn{background:transparent;border:0;color:#5a1231;cursor:pointer;font-weight:600}
-
     .uploader{background:linear-gradient(180deg,var(--card),#fff);padding:18px;border-radius:20px;box-shadow:var(--shadow);display:flex;gap:14px;align-items:center;border:1px solid rgba(255,140,190,0.18)}
     .uploader .left{flex:1}
     .filewrap{display:flex;gap:12px;align-items:center}
@@ -36,14 +24,11 @@
     .uploader input[type="file"]{display:none}
     .uploader input[type="text"]{width:100%;padding:12px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb}
     .note{font-size:12px;color:var(--muted);margin-top:8px}
-
-    /* previews */
     .preview{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
     .thumb{width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1px solid rgba(255,140,190,0.18);background:#fff}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
     .thumb .remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.45);color:#fff;border-radius:999px;padding:2px 6px;cursor:pointer;font-size:12px}
     .thumb .label{position:absolute;left:6px;bottom:6px;background:rgba(255,255,255,0.9);padding:2px 6px;border-radius:6px;font-size:11px}
-
     .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:22px}
     .card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border:1px solid rgba(255,140,190,0.08)}
     .imgwrap{position:relative}
@@ -64,24 +49,16 @@
     .comment-form button{padding:10px 14px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;cursor:pointer}
     .commenting-as{font-size:12px;color:#6a1a3a;margin-bottom:8px;display:flex;align-items:center;gap:8px}
     .commenting-as strong{background:#fff1f8;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,140,190,0.18)}
-
     .controls{display:flex;gap:8px;margin-top:8px}
     .btn-ghost{background:transparent;border:1px dashed rgba(255,140,190,0.25);padding:8px;border-radius:10px;cursor:pointer;color:#7a3750}
-
     footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-
-    /* Modal */
     .modal-backdrop{position:fixed;inset:0;background:rgba(20,10,20,0.4);display:flex;align-items:center;justify-content:center}
     .modal{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);width:300px}
     .modal h3{margin:0 0 8px}
     .modal input{width:100%;padding:10px;border-radius:10px;border:1px solid #ffd6ec;margin-bottom:8px}
     .modal .row{display:flex;gap:8px;align-items:center}
-
-    /* Hover effects */
     .card:hover{transform:translateY(-6px);transition:transform 220ms ease}
     .filebtn:active{transform:translateY(1px)}
-
-    /* Mobile */
     @media (max-width:480px){body{padding:18px}.uploader{flex-direction:column;align-items:stretch}.title-block{align-items:flex-start}}
   </style>
 </head>
@@ -138,12 +115,31 @@
     </div>
   </div>
 
-  <script>
-    // Keys
-    const STORAGE_KEY = 'photo_wall_posts_v1';
-    const USER_KEY = 'photo_wall_user_v1';
+  <!-- Firebase-powered client -->
+  <script type="module">
+    // --- SETUP: paste your Firebase config below ---
+    // Create a Firebase project, enable Firestore and Storage.
+    // Replace the object below with your project's config from Firebase console.
+    const FIREBASE_CONFIG = {
+      apiKey: "REPLACE_ME",
+      authDomain: "REPLACE_ME",
+      projectId: "REPLACE_ME",
+      storageBucket: "REPLACE_ME",
+      messagingSenderId: "REPLACE_ME",
+      appId: "REPLACE_ME"
+    };
 
-    // Elements
+    // Imports (Firebase v9 modular)
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js';
+    import { getFirestore, collection, doc, setDoc, addDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc, getDocs, deleteDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js';
+    import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/9.22.2/firebase-storage.js';
+    
+    // init
+    const app = initializeApp(FIREBASE_CONFIG);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    // Local UI code (mostly unchanged but now backed by Firestore + Storage)
     const fileInput = document.getElementById('file');
     const captionInput = document.getElementById('caption');
     const postBtn = document.getElementById('postBtn');
@@ -161,91 +157,57 @@
     const confirmLogin = document.getElementById('confirmLogin');
     const cancelLogin = document.getElementById('cancelLogin');
 
-    // selected files array so we can remove before posting
     let selectedFiles = [];
+    const USER_KEY = 'photo_wall_user_v1';
 
-    // user helpers: check sessionStorage first (temporary), then localStorage (remembered)
     function loadUser(){
-      try{
-        const sess = sessionStorage.getItem(USER_KEY);
-        if(sess) return JSON.parse(sess);
-        const local = localStorage.getItem(USER_KEY);
-        if(local) return JSON.parse(local);
-        return null;
-      }catch(e){console.error(e); return null}
+      try{ const sess = sessionStorage.getItem(USER_KEY); if(sess) return JSON.parse(sess); const local = localStorage.getItem(USER_KEY); if(local) return JSON.parse(local); return null; }catch(e){console.error(e); return null}
     }
-    function saveUser(user, remember=true){
-      // default: remember so user won't need to re-login
-      if(remember) localStorage.setItem(USER_KEY, JSON.stringify(user));
-      else sessionStorage.setItem(USER_KEY, JSON.stringify(user));
-      updateUserUi();
-    }
-    function clearUser(){
-      localStorage.removeItem(USER_KEY);
-      sessionStorage.removeItem(USER_KEY);
-      updateUserUi();
+    function saveUser(user, remember=true){ if(remember) localStorage.setItem(USER_KEY, JSON.stringify(user)); else sessionStorage.setItem(USER_KEY, JSON.stringify(user)); updateUserUi(); }
+    function clearUser(){ localStorage.removeItem(USER_KEY); sessionStorage.removeItem(USER_KEY); updateUserUi(); }
+    function updateUserUi(){ const u = loadUser(); if(u){ userDisplay.style.display='inline-flex'; userNameSpan.textContent = u.name; loginBtn.style.display='none'; logoutBtn.style.display='inline-block'; document.getElementById('site-sub').textContent = 'Posting as: ' + u.name + ' — posts & comments will show your name.'; } else { userDisplay.style.display='none'; loginBtn.style.display='inline-block'; logoutBtn.style.display='none'; document.getElementById('site-sub').textContent = 'Upload your sweetest moments, caption them, and let visitors leave cute comments.'; } }
+
+    // helper to convert dataURL to Blob
+    async function dataUrlToBlob(dataUrl){ const res = await fetch(dataUrl); return await res.blob(); }
+
+    // upload image to Firebase Storage and return downloadURL
+    async function uploadImageBlob(blob, filename){ const ref = storageRef(storage, 'images/' + filename); await uploadBytes(ref, blob); return await getDownloadURL(ref); }
+
+    // create post document in Firestore. Posts collection name: 'posts'
+    async function createPost({imageUrl, caption, author}){
+      const docRef = await addDoc(collection(db, 'posts'), {
+        imageUrl, caption, author, createdAt: serverTimestamp()
+      });
+      return docRef.id;
     }
 
-    function updateUserUi(){
-      const u = loadUser();
-      if(u){
-        userDisplay.style.display = 'inline-flex';
-        userNameSpan.textContent = u.name;
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-        document.getElementById('site-sub').textContent = 'Posting as: ' + u.name + ' — posts & comments will show your name.';
-      }else{
-        userDisplay.style.display = 'none';
-        loginBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-        document.getElementById('site-sub').textContent = 'Upload your sweetest moments, caption them, and let visitors leave cute comments.';
-      }
+    // rendering: listen to posts collection in realtime
+    function startRealtimeFeed(){
+      const q = query(collection(db, 'posts'), orderBy('createdAt','desc'));
+      onSnapshot(q, async (snapshot) => {
+        // load posts and render
+        const posts = [];
+        snapshot.forEach(docSnap => { const data = docSnap.data(); posts.push({ id: docSnap.id, ...data }); });
+        renderPosts(posts);
+      });
     }
 
-    // load/save posts
-    function loadPosts(){
-      try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : [];}catch(e){console.error(e); return []}
-    }
-    function savePosts(posts){localStorage.setItem(STORAGE_KEY, JSON.stringify(posts))}
+    // For each post, also listen to its subcollection 'comments' in realtime when rendering.
+    const commentListeners = new Map();
 
-    function readAndResize(file, maxWidth=1200){
-      return new Promise((resolve,reject)=>{
-        const img = new Image();
-        const reader = new FileReader();
-        reader.onerror = reject;
-        reader.onload = e => {
-          img.onload = () => {
-            const scale = Math.min(1, maxWidth / img.width);
-            const w = Math.round(img.width * scale);
-            const h = Math.round(img.height * scale);
-            const c = document.createElement('canvas');
-            c.width = w; c.height = h;
-            const ctx = c.getContext('2d');
-            ctx.drawImage(img,0,0,w,h);
-            const dataUrl = c.toDataURL('image/jpeg', 0.85);
-            resolve(dataUrl);
-          }
-          img.onerror = reject;
-          img.src = e.target.result;
-        }
-        reader.readAsDataURL(file);
-      })
-    }
-
-    function render(){
-      const posts = loadPosts();
-      const currentUser = loadUser();
+    function renderPosts(posts){
       feed.innerHTML = '';
-      posts.slice().reverse().forEach(post => {
-        const card = document.createElement('article');
-        card.className = 'card';
+      const currentUser = loadUser();
+      if(posts.length === 0){ feed.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:30px;background:transparent">No posts yet — be the first to brighten the wall! 🌸</div>'; return; }
+      posts.forEach(post => {
+        const card = document.createElement('article'); card.className='card';
         card.innerHTML = `
           <div class="imgwrap">
-            <img src="${post.dataUrl}" alt="user upload">
+            <img src="${escapeHtml(post.imageUrl)}" alt="user upload">
             <div class="heart" title="cute">♥</div>
           </div>
           <div class="meta">
-            <div class="meta-top"><div class="author">${escapeHtml(post.author || 'Anonymous')}</div><div class="time">${new Date(post.createdAt).toLocaleString()}</div></div>
+            <div class="meta-top"><div class="author">${escapeHtml(post.author || 'Anonymous')}</div><div class="time">${post.createdAt && post.createdAt.toDate ? post.createdAt.toDate().toLocaleString() : ''}</div></div>
             <p class="caption">${escapeHtml(post.caption || '')}</p>
             <div class="controls">
               <button class="btn-ghost" data-action="download">Download</button>
@@ -253,177 +215,137 @@
             </div>
           </div>
           <div class="comments">
-            <div class="comments-list">
-              ${ (post.comments||[]).map(c=>`<div class="comment"><span class="c-author">${escapeHtml(c.author||'Anonymous')}</span>: <strong>${escapeHtml(c.text)}</strong><small>${new Date(c.createdAt).toLocaleString()}</small></div>`).join('') }
-            </div>
+            <div class="comments-list" data-post-id="${post.id}"></div>
             <div class="commenting-as">Commenting as: <strong>${escapeHtml((currentUser && currentUser.name) ? currentUser.name : 'Anonymous')}</strong></div>
             <form class="comment-form">
-              <input placeholder="Write a cute comment as ${escapeHtml((currentUser && currentUser.name) ? currentUser.name : 'Anonymous')}..." required>
+              <input placeholder="Write a cute comment as ${(currentUser && currentUser.name) ? escapeHtml(currentUser.name) : 'Anonymous'}..." required>
               <button type="submit">Comment</button>
             </form>
           </div>
         `;
 
         const downloadBtn = card.querySelector('[data-action="download"]');
-        downloadBtn.addEventListener('click', ()=>{
-          const a = document.createElement('a'); a.href = post.dataUrl; a.download = `photo-${post.id}.jpg`; document.body.appendChild(a); a.click(); a.remove();
-        });
+        downloadBtn.addEventListener('click', ()=>{ const a = document.createElement('a'); a.href = post.imageUrl; a.download = `photo-${post.id}.jpg`; document.body.appendChild(a); a.click(); a.remove(); });
+
         const deleteBtn = card.querySelector('[data-action="delete"]');
-        deleteBtn.addEventListener('click', ()=>{
+        deleteBtn.addEventListener('click', async ()=>{
           const current = loadUser();
-          // only allow delete if current user is author (or anonymous) — client-side only
           if(current && post.author && current.name !== post.author){ if(!confirm('You are not the author. Delete anyway?')) return; }
           if(!confirm('Delete this post?')) return;
-          const all = loadPosts();
-          const idx = all.findIndex(p=>p.id===post.id);
-          if(idx>-1){ all.splice(idx,1); savePosts(all); render(); }
+          try{
+            // delete storage object (best-effort: assume path images/{post.id}.jpg but we stored random names; since we used generated filename we can't infer — we'll attempt to delete the URL by creating ref from URL)
+            // For safety we only delete the document. Image storage cleaning requires a backend or storing storage path in the doc.
+            await deleteDoc(doc(db, 'posts', post.id));
+          }catch(err){console.error(err); alert('Failed to delete post'); }
         });
 
+        // comment submit -> add doc to subcollection 'comments'
         const commentForm = card.querySelector('.comment-form');
-        commentForm.addEventListener('submit', e=>{
+        commentForm.addEventListener('submit', async (e)=>{
           e.preventDefault();
           const input = commentForm.querySelector('input');
           const text = input.value.trim();
           if(!text) return;
-          const all = loadPosts();
-          const p = all.find(pp=>pp.id===post.id);
-          if(!p) return;
           const user = loadUser();
-          p.comments = p.comments || [];
-          p.comments.push({text, author: (user && user.name) ? user.name : 'Anonymous', createdAt: new Date().toISOString()});
-          savePosts(all);
-          input.value = '';
-          render();
+          try{
+            await addDoc(collection(db, 'posts', post.id, 'comments'), {
+              text, author: (user && user.name) ? user.name : 'Anonymous', createdAt: serverTimestamp()
+            });
+            input.value = '';
+          }catch(err){console.error(err); alert('Failed to add comment'); }
         });
 
         feed.appendChild(card);
-      })
-      if(posts.length===0){
-        feed.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);padding:30px;background:transparent">No posts yet — be the first to brighten the wall! 🌸</div>'
-      }
-    }
 
-    // preview helpers
-    function renderPreviews(){
-      preview.innerHTML = '';
-      selectedFiles.forEach((file, idx) => {
-        const el = document.createElement('div'); el.className = 'thumb';
-        const img = document.createElement('img'); img.src = URL.createObjectURL(file); img.alt = file.name;
-        const remove = document.createElement('div'); remove.className = 'remove'; remove.textContent = '×';
-        remove.title = 'Remove';
-        remove.addEventListener('click', ()=>{ removeFileAt(idx); });
-        const label = document.createElement('div'); label.className = 'label'; label.textContent = Math.round(file.size/1024) + 'KB';
-        el.appendChild(img); el.appendChild(remove); el.appendChild(label);
-        preview.appendChild(el);
+        // attach realtime listener for comments for this post
+        if(!commentListeners.has(post.id)){
+          const q = query(collection(db, 'posts', post.id, 'comments'), orderBy('createdAt','asc'));
+          const unsub = onSnapshot(q, snap => {
+            const list = card.querySelector('.comments-list');
+            list.innerHTML = '';
+            snap.forEach(cs => { const cd = cs.data(); const item = document.createElement('div'); item.className='comment'; item.innerHTML = `<span class="c-author">${escapeHtml(cd.author||'Anonymous')}</span>: <strong>${escapeHtml(cd.text)}</strong><small>${cd.createdAt && cd.createdAt.toDate ? cd.createdAt.toDate().toLocaleString() : ''}</small>`; list.appendChild(item); });
+          });
+          commentListeners.set(post.id, unsub);
+        }
       });
     }
-    function removeFileAt(idx){
-      selectedFiles.splice(idx,1);
-      updateFileInputFiles();
-      renderPreviews();
-    }
-    function updateFileInputFiles(){
-      // sync selectedFiles back to the file input using DataTransfer
-      try{
-        const dt = new DataTransfer();
-        selectedFiles.forEach(f => dt.items.add(f));
-        fileInput.files = dt.files;
-      }catch(e){
-        // fallback: can't set files (older browsers) — just clear input and warn
-        fileInput.value = '';
-      }
-    }
 
-    fileInput.addEventListener('change', (e)=>{
-      selectedFiles = Array.from(e.target.files).slice(0,20); // limit to 20
-      updateFileInputFiles();
-      renderPreviews();
-    });
+    // preview UI
+    function renderPreviews(){ preview.innerHTML=''; selectedFiles.forEach((file, idx)=>{ const el=document.createElement('div'); el.className='thumb'; const img=document.createElement('img'); img.src=URL.createObjectURL(file); img.alt=file.name; const remove=document.createElement('div'); remove.className='remove'; remove.textContent='×'; remove.title='Remove'; remove.addEventListener('click', ()=>{ removeFileAt(idx); }); const label=document.createElement('div'); label.className='label'; label.textContent = Math.round(file.size/1024) + 'KB'; el.appendChild(img); el.appendChild(remove); el.appendChild(label); preview.appendChild(el); }); }
+    function removeFileAt(idx){ selectedFiles.splice(idx,1); updateFileInputFiles(); renderPreviews(); }
+    function updateFileInputFiles(){ try{ const dt=new DataTransfer(); selectedFiles.forEach(f=>dt.items.add(f)); fileInput.files = dt.files; }catch(e){ fileInput.value=''; } }
 
-    // Posting (supports multiple files)
+    fileInput.addEventListener('change', (e)=>{ selectedFiles = Array.from(e.target.files).slice(0,20); updateFileInputFiles(); renderPreviews(); });
+
+    // Posting: upload each image to Storage and then create a Firestore post doc
     postBtn.addEventListener('click', async ()=>{
-      if(selectedFiles.length === 0){ alert('Please choose at least one image.'); return }
-      postBtn.disabled = true; postBtn.textContent = 'Posting...';
+      if(selectedFiles.length===0){ alert('Please choose at least one image.'); return }
+      postBtn.disabled=true; postBtn.textContent='Posting...';
       try{
-        const results = await Promise.all(selectedFiles.map(f => readAndResize(f, 1200)));
-        const posts = loadPosts();
         const user = loadUser();
-        const newPosts = results.map(dataUrl => ({
-          id: String(Date.now()) + Math.random().toString(36).slice(2,8),
-          dataUrl,
-          caption: captionInput.value.trim(),
-          comments: [],
-          createdAt: new Date().toISOString(),
-          author: (user && user.name) ? user.name : 'Anonymous'
-        }));
-        posts.push(...newPosts);
-        savePosts(posts);
-        // clear selection
-        selectedFiles = [];
-        fileInput.value = '';
-        captionInput.value = '';
-        renderPreviews();
-        render();
-      }catch(err){console.error(err); alert('Failed to read one or more images.')}
-      finally{postBtn.disabled = false; postBtn.textContent = 'Post ♥'}
+        for(const f of selectedFiles){
+          const resized = await readAndResize(f, 1200);
+          const blob = await dataUrlToBlob(resized);
+          // create a filename using timestamp + random
+          const filename = 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,8) + '.jpg';
+          const imageUrl = await uploadImageBlob(blob, filename);
+          await createPost({ imageUrl, caption: captionInput.value.trim(), author: (user && user.name) ? user.name : 'Anonymous' });
+        }
+        // clear
+        selectedFiles=[]; fileInput.value=''; captionInput.value=''; renderPreviews();
+      }catch(err){console.error(err); alert('Upload failed: '+err.message)}
+      finally{ postBtn.disabled=false; postBtn.textContent='Post ♥'; }
     });
 
-    // Export / Import
-    exportBtn.addEventListener('click', ()=>{
-      const posts = loadPosts();
-      const blob = new Blob([JSON.stringify(posts, null, 2)], {type:'application/json'});
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'photo_wall_export.json';
-      document.body.appendChild(a); a.click(); a.remove();
-    });
-    importFile.addEventListener('change', async (e)=>{
-      const f = e.target.files[0];
-      if(!f) return;
+    // Export / Import (local JSON of posts only) — not necessary when using global DB but kept for backup
+    exportBtn.addEventListener('click', async ()=>{
+      // fetch posts from Firestore for export (best-effort)
       try{
-        const txt = await f.text();
-        const parsed = JSON.parse(txt);
-        if(!Array.isArray(parsed)) throw new Error('Invalid format');
-        for(const p of parsed){ if(!p.id||!p.dataUrl) throw new Error('Missing fields'); }
-        savePosts(parsed);
-        render();
-        alert('Imported posts (replaced current data).');
-      }catch(err){alert('Import failed: '+err.message)}
-      finally{importFile.value=''}
+        const snapshot = await getDocs(collection(db,'posts'));
+        const arr = [];
+        for(const d of snapshot.docs){ const data = d.data(); arr.push({id:d.id, ...data}); }
+        const blob = new Blob([JSON.stringify(arr, null, 2)], {type:'application/json'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='photo_wall_export.json'; document.body.appendChild(a); a.click(); a.remove();
+      }catch(err){alert('Export failed: '+err.message)}
     });
 
-    // Login controls (simplified: name only, no password)
-    loginBtn.addEventListener('click', ()=>{
-      loginName.value = '';
-      loginModal.style.display = 'flex';
-      setTimeout(()=>loginName.focus(), 50);
-    });
-    cancelLogin.addEventListener('click', ()=> loginModal.style.display = 'none');
-    confirmLogin.addEventListener('click', ()=>{
-      const name = (loginName.value || '').trim();
-      if(!name){ alert('Please enter a display name.'); return; }
-      // default to remembering the user so they don't have to log in again
-      saveUser({name}, true);
-      loginModal.style.display = 'none';
-      render();
-    });
-    // allow submit by pressing Enter and close modal by clicking outside or pressing Escape
-    loginName.addEventListener('keydown', e => { if(e.key === 'Enter') confirmLogin.click(); });
-    loginModal.addEventListener('click', e => { if(e.target === loginModal) loginModal.style.display = 'none'; });
-    document.addEventListener('keydown', e => { if(e.key === 'Escape') loginModal.style.display = 'none'; });
-
-    logoutBtn.addEventListener('click', ()=>{
-      if(!confirm('Log out?')) return;
-      clearUser();
-      render();
+    importFile.addEventListener('change', async (e)=>{
+      const f = e.target.files[0]; if(!f) return; try{ const txt = await f.text(); const parsed = JSON.parse(txt); if(!Array.isArray(parsed)) throw new Error('Invalid format');
+        // import as new posts (upload images not supported in import) — this is only for JSON backups that include imageUrl
+        for(const p of parsed){ if(!p.id||!p.imageUrl) continue; await setDoc(doc(db,'posts',p.id), { imageUrl:p.imageUrl, caption:p.caption||'', author:p.author||'Anonymous', createdAt: p.createdAt ? new Date(p.createdAt) : serverTimestamp() }); }
+        alert('Import complete');
+      }catch(err){alert('Import failed: '+err.message)} finally{ importFile.value=''; }
     });
 
-    // helpers
+    // Start realtime feed
+    startRealtimeFeed();
+
+    // Login controls (simplified)
+    loginBtn.addEventListener('click', ()=>{ loginName.value=''; loginModal.style.display='flex'; setTimeout(()=>loginName.focus(),50); });
+    cancelLogin.addEventListener('click', ()=> loginModal.style.display='none');
+    confirmLogin.addEventListener('click', ()=>{ const name=(loginName.value||'').trim(); if(!name){ alert('Please enter a display name.'); return; } saveUser({name}, true); loginModal.style.display='none'; });
+    loginName.addEventListener('keydown', e=>{ if(e.key==='Enter') confirmLogin.click(); });
+    loginModal.addEventListener('click', e=>{ if(e.target===loginModal) loginModal.style.display='none'; });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') loginModal.style.display='none'; });
+    logoutBtn.addEventListener('click', ()=>{ if(!confirm('Log out?')) return; clearUser(); });
+
+    // small helpers
     function escapeHtml(s){ return (s||'').replace(/[&<>\"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
+    function readAndResize(file, maxWidth=1200){ return new Promise((resolve,reject)=>{ const img=new Image(); const reader=new FileReader(); reader.onerror=reject; reader.onload=e=>{ img.onload=()=>{ const scale=Math.min(1,maxWidth/img.width); const w=Math.round(img.width*scale); const h=Math.round(img.height*scale); const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d'); ctx.drawImage(img,0,0,w,h); const dataUrl=c.toDataURL('image/jpeg',0.85); resolve(dataUrl); }; img.onerror=reject; img.src=e.target.result; }; reader.readAsDataURL(file); }); }
 
-    // initialize UI and render
+    // initialize UI
     updateUserUi();
-    render();
+  </script>
+
+  <noscript>
+    <div style="padding:20px;background:#fff0f6;border-radius:10px;margin:20px;text-align:center;color:#6a1a3a">This page requires JavaScript and Firebase config to be set. Follow the README comments in the file.</div>
+  </noscript>
+
+  <script>
+    // Firestore SDK must be initialized in the module script above.
+    // This small script just calls render after module is ready in browsers that don't block modules.
+    // If you need help setting up Firebase: create a project at https://console.firebase.google.com, enable Firestore (in test mode for quick dev) and Storage, then paste your config into FIREBASE_CONFIG.
+    // Security note: for a production app, configure Firestore/Storage rules so only authenticated users can write, or use Cloud Functions to enforce validation. This sample uses client-side writes for simplicity.
   </script>
 </body>
 </html>
