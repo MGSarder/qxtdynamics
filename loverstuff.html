@@ -59,9 +59,54 @@
     .card:hover{transform:translateY(-6px);transition:transform 220ms ease}
     .filebtn:active{transform:translateY(1px)}
     @media (max-width:480px){body{padding:18px}.uploader{flex-direction:column;align-items:stretch}.title-block{align-items:center}}
+    /* UNDERLAY: sits under everything and never blocks clicks */
+    .underlay{
+      position:fixed;
+      inset:0;                    /* full viewport */
+      pointer-events:none;        /* never block interactions */
+      z-index:0;                  /* below content */
+      overflow:visible;
+      }
+
+    /* base styles for the decorations */
+    .underlay .u-img{
+      position:absolute;
+      max-width:30vw;
+      width:auto;
+      opacity:0.95;
+      user-select:none;
+      pointer-events:none;
+      transition: transform .36s ease, opacity .36s ease;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.06));
+        }
+
+      /* individual placement (tweak to taste) */
+    .underlay .u1{ left: 8px;  top: 60%;  transform: rotate(-5deg); max-width:120px; opacity:0.55; }
+    .underlay .u2{ left: 40%; top: 60%; transform: translateX(-50%) rotate(2deg); max-width:240px; opacity:0.55; }
+    .underlay .u3{ left: 90px; bottom: 30%; transform: rotate(-8deg); max-width:160px; opacity:0.55;}
+    .underlay .u4{ left: 46px; top: 20%; transform: rotate(4deg); max-width:160px; opacity:0.55;}
+    .underlay .u5{ right: 8px; bottom: 6%; transform: rotate(4deg); max-width:160px; opacity:0.55;}
+
+    /* make sure page content sits above the underlay */
+    .wrap, header, main, footer, .modal, .modal-backdrop { position: relative; z-index: 10; }
+
+    /* if you have fixed/floating elements that must go on top (modals, menus), give them a higher z-index */
+    .modal-backdrop { z-index: 1000; } 
+
+    /* hide underlay on very small screens */
+    @media (max-width:720px){
+      .underlay{ display:none; }
+    }
   </style>
 </head>
 <body>
+  <div class="underlay" aria-hidden="true">
+  <img class="u-img u1" src="https://github.com/MGSarder/qxtdynamics/blob/main/1.jpg?raw=true" alt="">
+  <img class="u-img u2" src="https://github.com/MGSarder/qxtdynamics/blob/main/2.jpg?raw=true" alt="">
+  <img class="u-img u3" src="https://github.com/MGSarder/qxtdynamics/blob/main/3.jpg?raw=true" alt="">
+  <img class="u-img u4" src="https://github.com/MGSarder/qxtdynamics/blob/main/4.jpg?raw=true" alt="">
+  <img class="u-img u5" src="https://github.com/MGSarder/qxtdynamics/blob/main/5.jpg?raw=true" alt="">
+</div>
   <div class="wrap">
     <header>
       <div class="title-block">
