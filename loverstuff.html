@@ -4,62 +4,123 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Góc nhỏ của mụi và max</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root{ --bg:#fff0f6; --card:#ffffff; --muted:#b86b87; --accent:#ff6bcb; --accent-2:#ff9ad5; --shadow: 0 10px 30px rgba(255,105,180,0.08); --max-width:980px; font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
+    :root{
+      --bg:#fff0f6;
+      --card:#ffffff;
+      --muted:#b86b87;
+      --accent:#ff6bcb;
+      --accent-2:#ff9ad5;
+      --shadow: 0 10px 30px rgba(255,105,180,0.08);
+      --max-width:980px;
+      --gap:18px;
+      --radius:18px;
+      --base-font:16px;
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    }
+
+    /* Responsive base font: scales slightly with viewport, clamped for sanity */
+    html { font-size: clamp(14px, 1.6vw, 16px); } /* mobile ~14px, desktop ~16px */
     *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(180deg,var(--bg),#ffeef8 60%);color:#2b1330;display:flex;justify-content:center;padding:36px}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#ffeef8 60%);
+      color:#2b1330;
+      display:flex;
+      justify-content:center;
+      padding:clamp(12px,3.5vw,36px);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
     .wrap{width:100%;max-width:var(--max-width)}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px; gap:12px}
     .title-block{display:flex;flex-direction:column;align-items:center;padding-left:0px}
-    header h1{margin:0;font-size:26px;letter-spacing:0.4px}
-    header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+    header h1{margin:0;font-size:clamp(18px,3.2vw,26px);letter-spacing:0.3px}
+    header p{margin:6px 0 0;color:var(--muted);font-size:clamp(12px,2.2vw,14px)}
     .user-controls{display:flex;gap:8px;align-items:center}
-    .user-chip{background:#fff1f8;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,140,190,0.18);font-weight:600;color:#5a1231}
-    .link-btn{background:transparent;border:0;color:#5a1231;cursor:pointer;font-weight:600}
-    .uploader{background:linear-gradient(180deg,var(--card),#fff);padding:18px;border-radius:20px;box-shadow:var(--shadow);display:flex;gap:14px;align-items:center;border:1px solid rgba(255,140,190,0.18)}
+    .user-chip{background:#fff1f8;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,140,190,0.18);font-weight:700;color:#5a1231;font-size:0.95rem}
+    .link-btn{background:transparent;border:0;color:#5a1231;cursor:pointer;font-weight:600;font-size:0.95rem}
+
+    .uploader{
+      background:linear-gradient(180deg,var(--card),#fff);
+      padding:clamp(10px,3vw,18px);
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      display:flex;
+      gap:12px;
+      align-items:center;
+      border:1px solid rgba(255,140,190,0.18);
+      margin-bottom:8px;
+    }
     .uploader .left{flex:1}
-    .filewrap{display:flex;gap:12px;align-items:center}
-    .filebtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:0;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(255,105,180,0.14)}
+    .filewrap{display:flex;gap:8px;align-items:center;width:100%}
+    .filebtn{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:0;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(255,105,180,0.14);font-size:0.95rem
+    }
     .uploader input[type="file"]{display:none}
-    .uploader input[type="text"]{width:100%;padding:12px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb}
-    .note{font-size:12px;color:var(--muted);margin-top:8px}
-    .preview{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-    .thumb{width:80px;height:80px;border-radius:10px;overflow:hidden;position:relative;border:1px solid rgba(255,140,190,0.18);background:#fff}
+    .uploader input[type="text"]{width:100%;padding:10px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb;font-size:0.95rem}
+    .note{font-size:0.9rem;color:var(--muted);margin-top:8px}
+    .preview{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .thumb{width:68px;height:68px;border-radius:10px;overflow:hidden;position:relative;border:1px solid rgba(255,140,190,0.18);background:#fff}
     .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-    .thumb .remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.45);color:#fff;border-radius:999px;padding:2px 6px;cursor:pointer;font-size:12px}
-    .thumb .label{position:absolute;left:6px;bottom:6px;background:rgba(255,255,255,0.9);padding:2px 6px;border-radius:6px;font-size:11px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-top:22px}
-    .card{background:var(--card);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;border:1px solid rgba(255,140,190,0.08)}
-    .imgwrap{position:relative}
-    .card img{width:100%;height:auto;display:block;object-fit:cover}
+    .thumb .remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.45);color:#fff;border-radius:999px;padding:2px 6px;cursor:pointer;font-size:11px}
+    .thumb .label{position:absolute;left:6px;bottom:6px;background:rgba(255,255,255,0.9);padding:2px 6px;border-radius:6px;font-size:10px}
+
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--gap);margin-top:18px}
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      border:1px solid rgba(255,140,190,0.08);
+      transition:transform .22s ease;
+    }
+.imgwrap{
+  position:relative;
+  width:100%;
+  height:auto;               /* let the image dictate height */
+  overflow:hidden;
+  border-top-left-radius: var(--radius, 18px);
+  border-top-right-radius: var(--radius, 18px);
+  background:#fad2ea;
+}
+.card img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit:contain;        /* ensures the whole image is visible */
+  object-position:center;
+}
     .heart{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.9);padding:8px;border-radius:999px;box-shadow:0 6px 18px rgba(255,105,180,0.08);cursor:pointer}
     .meta{padding:12px}
-    .caption{margin:0 0 8px;font-weight:700;color:#3a0f2e}
-    .meta .meta-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
-    .author{font-size:13px;color:#6a1a3a;font-weight:700}
-    .time{font-size:12px;color:var(--muted);margin-bottom:8px}
-    .comments{border-top:1px solid #fff0f4;padding:12px;background:linear-gradient(180deg,rgba(255,250,253,0.7),transparent)}
-    .comment{font-size:13px;padding:8px 0;border-bottom:1px dashed rgba(255,180,210,0.25)}
+    .caption{margin:0 0 8px;font-weight:700;color:#3a0f2e;font-size:1rem}
+    .meta .meta-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .author{font-size:0.95rem;color:#6a1a3a;font-weight:700}
+    .time{font-size:0.85rem;color:var(--muted);margin-bottom:8px}
+    .comments{border-top:1px solid #fff0f4;padding:10px;background:linear-gradient(180deg,rgba(255,250,253,0.7),transparent)}
+    .comment{font-size:0.95rem;padding:8px 0;border-bottom:1px dashed rgba(255,180,210,0.25)}
     .comment:last-child{border-bottom:0}
-    .comment small{display:block;color:var(--muted);font-size:11px}
+    .comment small{display:block;color:var(--muted);font-size:0.8rem}
     .comment .c-author{font-weight:700;color:#6a1a3a}
     .comment-form{display:flex;gap:8px;margin-top:10px}
-    .comment-form input{flex:1;padding:10px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb}
-    .comment-form button{padding:10px 14px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;cursor:pointer}
-    .commenting-as{font-size:12px;color:#6a1a3a;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .comment-form input{flex:1;padding:8px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb;font-size:0.95rem}
+    .comment-form button{padding:8px 12px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;cursor:pointer;font-size:0.95rem}
+    .commenting-as{font-size:0.9rem;color:#6a1a3a;margin-bottom:8px;display:flex;align-items:center;gap:8px}
     .commenting-as strong{background:#fff1f8;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,140,190,0.18)}
     .controls{display:flex;gap:8px;margin-top:8px}
     .btn-ghost{background:transparent;border:1px dashed rgba(255,140,190,0.25);padding:8px;border-radius:10px;cursor:pointer;color:#7a3750}
-    footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
+    footer{margin-top:12px;text-align:center;color:var(--muted);font-size:0.95rem}
     .modal-backdrop{position:fixed;inset:0;background:rgba(20,10,20,0.4);display:flex;align-items:center;justify-content:center}
-    .modal{background:var(--card);padding:18px;border-radius:12px;box-shadow:var(--shadow);width:300px}
+    .modal{background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);width:300px}
     .modal h3{margin:0 0 8px}
     .modal input{width:100%;padding:10px;border-radius:10px;border:1px solid #ffd6ec;margin-bottom:8px}
-    .card:hover{transform:translateY(-6px);transition:transform 220ms ease}
+    .card:hover{transform:translateY(-6px)}
     .filebtn:active{transform:translateY(1px)}
-    @media (max-width:480px){body{padding:18px}.uploader{flex-direction:column;align-items:stretch}.title-block{align-items:center}}
-    
+
     /* ---------- Responsive underlay (keeps pictures visible and scales) ---------- */
     .underlay{
       position:fixed;
@@ -79,6 +140,8 @@
       pointer-events: none;
       transition: transform .28s ease, opacity .28s ease, width .28s ease;
       filter: drop-shadow(0 10px 30px rgba(0,0,0,0.06));
+      border-radius:8px;
+      object-fit:cover;
     }
 
     /* positions expressed in % so they stay inside the viewport on small screens */
@@ -90,17 +153,48 @@
 
     /* MOBILE: shrink and nudge positions so they remain visible (do NOT hide) */
     @media (max-width:720px){
+      /* generally smaller gaps, paddings and tighter layout */
+      :root { --gap:12px; --radius:14px; }
+      header{gap:8px}
+      .uploader{padding:10px; gap:10px}
+      .filebtn{padding:8px 10px; font-size:0.9rem}
+      .uploader input[type="text"]{padding:8px}
+      .preview{gap:6px}
+      .thumb{width:56px;height:56px}
+      .meta{padding:10px}
+      .caption{font-size:0.95rem}
+      .comment-form input, .comment-form button{font-size:0.9rem;padding:8px}
+      .grid{gap:12px;margin-top:14px}
+      .card{border-radius:12px}
       .underlay .u-img{ width: clamp(48px, 18vw, 200px); opacity:0.85; }
+      .imgwrap{ height: clamp(100px, 28vw, 260px);
 
       /* move things a bit inward on narrow viewports */
-      .underlay .u1{ left: 8%; top: 6%; max-width:140px;opacity:0.6; }
-      .underlay .u2{ left: 50%; top: 88%; width: clamp(100px, 60vw, 360px); opacity:0.45; } /* make center less intrusive */
-      .underlay .u3{ left: 6%; bottom: 24%; max-width:120px;opacity:0.6; }
-      .underlay .u4{ left: 4%; top: 8%; max-width:120px;opacity:0.6; }
-      .underlay .u5{ right: 6%; bottom: 6%; max-width:120px;opacity:0.6; }
+      .underlay .u1{ left: 4%; top: 62%; max-width:140px; }
+      .underlay .u2{ left: 50%; top: 48%; width: clamp(100px, 60vw, 360px); opacity:0.45; } /* make center less intrusive */
+      .underlay .u3{ left: 6%; bottom: 24%; max-width:120px; }
+      .underlay .u4{ left: 4%; top: 8%; max-width:120px; }
+      .underlay .u5{ right: 6%; bottom: 6%; max-width:120px; }
 
-      /* If you'd like to hide the largest decoration on tiny devices, uncomment:
-         .underlay .u2 { display:none; } */
+      /* make grid single column on most phones */
+      .grid{grid-template-columns:1fr}
+    }
+  }
+    /* Tweak specifically for narrow devices around iPhone widths (~390px) */
+    @media (max-width:390px){
+      html { font-size: 14px; } /* ensure compact base */
+      body{ padding:10px; }
+      header h1{ font-size:18px; }
+      .filebtn{ padding:7px 10px; font-size:0.88rem; }
+      .uploader input[type="text"]{ padding:8px; font-size:0.9rem; }
+      .thumb{ width:48px; height:48px; }
+      .underlay .u-img{ width: clamp(40px, 20vw, 180px); opacity:0.85; filter: none; }
+      .underlay .u2{ width: clamp(80px, 70vw, 320px); top:46%; opacity:0.4; } /* center less intrusive */
+      .meta{padding:8px}
+      .comment-form input, .comment-form button{ padding:7px; font-size:0.86rem; }
+      footer{ font-size:0.88rem; }
+      .card{ border-radius:10px; }
+      .imgwrap{ height: clamp(76px, 32vw, 180px); }
     }
 
     /* ensure page content stacks above the underlay */
@@ -142,7 +236,7 @@
         <div id="preview" class="preview"></div>
         <div class="note">Caption tối đa 220 kí tự hoy nha cục dàng</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:35px">
+      <div style="display:flex;flex-direction:column;gap:8px;padding-bottom:18px">
         <button id="postBtn" class="filebtn">Post ♥</button>
       </div>
     </section>
