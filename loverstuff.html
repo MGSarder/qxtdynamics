@@ -20,8 +20,8 @@
       font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial;
     }
 
-    /* Responsive base font: scales slightly with viewport, clamped for sanity */
-    html { font-size: clamp(14px, 1.6vw, 16px); } /* mobile ~14px, desktop ~16px */
+    /* Responsive base font */
+    html { font-size: clamp(14px, 1.6vw, 16px); }
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -39,8 +39,23 @@
     .title-block{display:flex;flex-direction:column;align-items:center;padding-left:0px}
     header h1{margin:0;font-size:clamp(18px,3.2vw,26px);letter-spacing:0.3px}
     header p{margin:6px 0 0;color:var(--muted);font-size:clamp(12px,2.2vw,14px)}
-    .user-controls{display:flex;gap:8px;align-items:center}
-    .user-chip{background:#fff1f8;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,140,190,0.18);font-weight:700;color:#5a1231;font-size:0.95rem}
+    .user-controls { display:flex; gap:8px; align-items:center; }
+    .user-chip{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:4px;
+    padding:8px 12px;
+    background:#fff1f8;
+    border-radius:999px;
+    border:1px solid rgba(255,140,190,0.18);
+    color:#5a1231;
+    min-width:72px;
+    text-align:center;
+    font-weight:600;
+    }
+
+    
     .link-btn{background:transparent;border:0;color:#5a1231;cursor:pointer;font-weight:600;font-size:0.95rem}
 
     .uploader{
@@ -57,7 +72,18 @@
     .uploader .left{flex:1}
     .filewrap{display:flex;gap:8px;align-items:center;width:100%}
     .filebtn{
-      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:0;cursor:pointer;font-weight:600;box-shadow:0 6px 18px rgba(255,105,180,0.14);font-size:0.95rem
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:12px;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      color:#fff;
+      border:0;
+      cursor:pointer;
+      font-weight:600;
+      box-shadow:0 6px 18px rgba(255,105,180,0.14);
+      font-size:0.95rem;
     }
     .uploader input[type="file"]{display:none}
     .uploader input[type="text"]{width:100%;padding:10px;border-radius:12px;border:1px solid #ffd6ec;background:#fff8fb;font-size:0.95rem}
@@ -68,7 +94,14 @@
     .thumb .remove{position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.45);color:#fff;border-radius:999px;padding:2px 6px;cursor:pointer;font-size:11px}
     .thumb .label{position:absolute;left:6px;bottom:6px;background:rgba(255,255,255,0.9);padding:2px 6px;border-radius:6px;font-size:10px}
 
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--gap);margin-top:18px}
+    /* Desktop / default grid */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:var(--gap);
+      margin-top:18px;
+    }
+
     .card{
       background:var(--card);
       border-radius:var(--radius);
@@ -79,21 +112,23 @@
       border:1px solid rgba(255,140,190,0.08);
       transition:transform .22s ease;
     }
-  .imgwrap {
-    position: relative;
-    width: 100%;
-    height: auto;           /* let the image determine height */
-    overflow: visible;      /* avoid cropping on mobile */
-    background: #f8eef4;
-  }
-    .card img {
-    display: block;
-    width: 100%;
-    height: auto;
-    object-fit: contain;    /* ensures whole image is visible */
-    object-position: center;
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
+
+    /* Desktop image wrapper: consistent height and cover */
+    .imgwrap{
+      position:relative;
+      width:100%;
+      height: clamp(180px, 22vw, 360px);
+      overflow:hidden;
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+      background:#f8eef4;
+    }
+    .card img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover; /* desktop: fill and crop */
+      object-position:center;
     }
 
     .heart{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.9);padding:8px;border-radius:999px;box-shadow:0 6px 18px rgba(255,105,180,0.08);cursor:pointer}
@@ -122,7 +157,7 @@
     .card:hover{transform:translateY(-6px)}
     .filebtn:active{transform:translateY(1px)}
 
-    /* ---------- Responsive underlay (keeps pictures visible and scales) ---------- */
+    /* ---------- Decorative underlay ---------- */
     .underlay{
       position:fixed;
       inset:0;
@@ -130,11 +165,9 @@
       z-index:0;
       overflow:visible;
     }
-
-    /* base styles: use clamp() so images scale smoothly with viewport */
     .underlay .u-img{
       position:absolute;
-      width: clamp(72px, 12vw, 320px); /* min, preferred (vw), max */
+      width: clamp(72px, 12vw, 320px);
       height: auto;
       opacity: 0.9;
       user-select: none;
@@ -144,17 +177,14 @@
       border-radius:8px;
       object-fit:cover;
     }
-
-    /* positions expressed in % so they stay inside the viewport on small screens */
-    .underlay .u1{ left: 6%;  top: 60%;  transform: translateY(-50%) rotate(-5deg); max-width:180px; opacity:0.65; }
-    .underlay .u2{ left: 50%; top: 58%; transform: translate(-50%,-50%) rotate(2deg); width: clamp(120px, 42vw, 520px); opacity:0.55; } /* center hero */
+    .underlay .u1{ left: 6%;  top: 60%; transform: translateY(-50%) rotate(-5deg); max-width:180px; opacity:0.65; }
+    .underlay .u2{ left: 50%; top: 58%; transform: translate(-50%,-50%) rotate(2deg); width: clamp(120px, 42vw, 520px); opacity:0.55; }
     .underlay .u3{ left: 10%; bottom: 28%; transform: translateY(0) rotate(-8deg); max-width:160px; opacity:0.65; }
     .underlay .u4{ left: 8%; top: 18%; transform: rotate(4deg); max-width:160px; opacity:0.6; }
     .underlay .u5{ right: 6%; bottom: 6%; transform: rotate(4deg); max-width:160px; opacity:0.6; }
 
-    /* MOBILE: shrink and nudge positions so they remain visible (do NOT hide) */
+    /* ---------- Mobile / phone styles ---------- */
     @media (max-width:720px){
-      /* generally smaller gaps, paddings and tighter layout */
       :root { --gap:12px; --radius:14px; }
       header{gap:8px}
       .uploader{padding:10px; gap:10px}
@@ -165,55 +195,55 @@
       .meta{padding:10px}
       .caption{font-size:0.95rem}
       .comment-form input, .comment-form button{font-size:0.9rem;padding:8px}
+      .user-controls{display:flex;gap:8px;align-items:center}
+      /* 2-column grid on phones */
       .grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;              /* slightly tighter gap on phones */
-      margin-top: 12px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 12px;
       }
-      .card {
-      border-radius: 12px;
-      overflow: hidden;
-      }
-      .underlay .u-img{ width: clamp(48px, 18vw, 200px); opacity:0.85; }
-      .imgwrap {
-      position: relative;
-      width: 100%;
-      height: auto;           /* let the image determine height */
-      overflow: visible;      /* avoid cropping on mobile */
-      background: #f8eef4;
-  }
+      .card { border-radius:12px; overflow:hidden; }
 
-      /* move things a bit inward on narrow viewports */
+      /* show full image on phones (no crop) */
+      .imgwrap{
+        position:relative;
+        width:100%;
+        height:auto;
+        overflow:visible;
+        background:#f8eef4;
+      }
+      .card img{
+        display:block;
+        width:100%;
+        height:auto;
+        object-fit:contain; /* show whole image on phones */
+        object-position:center;
+      }
+
+      .underlay .u-img{ width: clamp(48px, 18vw, 200px); opacity:0.85; }
       .underlay .u1{ left: 4%; top: 62%; max-width:140px; }
-      .underlay .u2{ left: 50%; top: 48%; width: clamp(100px, 60vw, 360px); opacity:0.45; } /* make center less intrusive */
+      .underlay .u2{ left: 50%; top: 48%; width: clamp(100px, 60vw, 360px); opacity:0.45; }
       .underlay .u3{ left: 6%; bottom: 24%; max-width:120px; }
       .underlay .u4{ left: 4%; top: 8%; max-width:120px; }
       .underlay .u5{ right: 6%; bottom: 6%; max-width:120px; }
-
-      /* make grid single column on most phones */
-      .grid{grid-template-columns:1fr}
     }
-  }
-    /* Tweak specifically for narrow devices around iPhone widths (~390px) */
+
+    /* very narrow phones (single column) */
     @media (max-width:340px){
-      html { font-size: 14px; } /* ensure compact base */
+      html { font-size: 14px; }
       body{ padding:10px; }
       header h1{ font-size:18px; }
       .filebtn{ padding:7px 10px; font-size:0.88rem; }
       .uploader input[type="text"]{ padding:8px; font-size:0.9rem; }
       .thumb{ width:48px; height:48px; }
       .underlay .u-img{ width: clamp(40px, 20vw, 180px); opacity:0.85; filter: none; }
-      .underlay .u2{ width: clamp(80px, 70vw, 320px); top:46%; opacity:0.4; } /* center less intrusive */
+      .underlay .u2{ width: clamp(80px, 70vw, 320px); top:46%; opacity:0.4; }
       .meta{padding:8px}
       .comment-form input, .comment-form button{ padding:7px; font-size:0.86rem; }
       footer{ font-size:0.88rem; }
       .card{ border-radius:10px; }
-      .imgwrap{ height: clamp(76px, 32vw, 180px); }
-      .grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;              /* slightly tighter gap on phones */
-      margin-top: 12px;
-  }
+      /* switch to single column for very small devices */
+      .grid { grid-template-columns: 1fr; gap:10px; margin-top:12px; }
     }
 
     /* ensure page content stacks above the underlay */
@@ -224,7 +254,6 @@
 </head>
 <body>
   <div class="underlay" aria-hidden="true">
-    <!-- decorative images (replace these src with your own URLs if desired) -->
     <img class="u-img u1" src="https://github.com/MGSarder/qxtdynamics/blob/main/1.jpg?raw=true" alt="">
     <img class="u-img u2" src="https://github.com/MGSarder/qxtdynamics/blob/main/2.jpg?raw=true" alt="">
     <img class="u-img u3" src="https://github.com/MGSarder/qxtdynamics/blob/main/3.jpg?raw=true" alt="">
@@ -239,7 +268,10 @@
         <p id="site-sub">Safe places dành cho long distance relationship của mụi và mã.</p>
       </div>
       <div class="user-controls">
-        <div id="userDisplay" style="display:none" class="user-chip">Cúc cu, <span id="userName">You </span></div>
+        <div id="userDisplay" style="display:none" class="user-chip">
+        <div class="uc-label">Cúc cu,</div>
+        <div class="uc-name"><span id="userName">You</span></div>
+      </div>
         <button id="loginBtn" class="link-btn">Log in</button>
         <button id="logoutBtn" class="link-btn" style="display:none">Log out</button>
       </div>
@@ -277,10 +309,9 @@
     </div>
   </div>
 
-  <!-- Supabase -->
+  <!-- Supabase + app script (unchanged except keys) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    // REPLACE these with your project details (if you want to change):
     const SUPABASE_URL = "https://gfakpzqdsolzyihwwnvd.supabase.co";
     const SUPABASE_KEY = "sb_publishable_dFXVHx7R35VMP3NwftXT4g_iiYthAZZ";
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -300,7 +331,6 @@
     const confirmLogin = document.getElementById('confirmLogin');
     const cancelLogin = document.getElementById('cancelLogin');
 
-    // selectedFiles will be an array of { file, url, sizeKB }
     let selectedFiles = [];
     const USER_KEY = 'photo_wall_user_v1';
     const MAX_FILES = 20;
@@ -310,12 +340,8 @@
     function clearUser(){ localStorage.removeItem(USER_KEY); updateUserUi(); }
     function updateUserUi(){ const u=loadUser(); if(u){ userDisplay.style.display='inline-flex'; userNameSpan.textContent=u.name; loginBtn.style.display='none'; logoutBtn.style.display='inline-block'; document.getElementById('site-sub').textContent = 'Đăng nhập bởi: ' + u.name; } else { userDisplay.style.display='none'; loginBtn.style.display='inline-block'; logoutBtn.style.display='none'; document.getElementById('site-sub').textContent='Safe places dành cho long distance relationship của mụi và mã.'; } }
 
-    // small helper: safe HTML escaping
     function escapeHtml(s){return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
-
-    // create per-file object urls and keep track so we can revoke
     function createPreviewList(files){
-      // revoke any previous object URLs first
       selectedFiles.forEach(f=>{ if(f.url) URL.revokeObjectURL(f.url); });
       selectedFiles = Array.from(files).slice(0, MAX_FILES).map(f=>({
         file: f,
@@ -324,45 +350,26 @@
       }));
       renderPreviews();
     }
-
     function renderPreviews(){
       preview.innerHTML='';
       selectedFiles.forEach((entry, idx)=>{
         const el=document.createElement('div'); el.className='thumb';
         el.innerHTML=`<img src="${entry.url}"><div class="remove">×</div><div class="label">${entry.sizeKB}KB</div>`;
-        el.querySelector('.remove').onclick=()=>{ 
-          // revoke URL and remove from list
-          if(entry.url) URL.revokeObjectURL(entry.url);
-          selectedFiles.splice(idx,1); renderPreviews();
-        };
+        el.querySelector('.remove').onclick=()=>{ if(entry.url) URL.revokeObjectURL(entry.url); selectedFiles.splice(idx,1); renderPreviews(); };
         preview.appendChild(el);
       });
     }
+    fileInput.onchange = e => { const files = e.target.files; if(!files || !files.length) return; createPreviewList(files); };
 
-    fileInput.onchange = e => {
-      const files = e.target.files;
-      if(!files || !files.length) return;
-      // Optional: you can filter by size/type here
-      createPreviewList(files);
-    };
-
-    // safe filename using UUID (fallback to random if not available)
-    function makeFilename(originalName){
-      const ext = (originalName.match(/\.[^.]+$/)||[''])[0];
-      let id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2,10);
-      return `${Date.now()}-${id}${ext}`;
-    }
-
+    function makeFilename(originalName){ const ext = (originalName.match(/\.[^.]+$/)||[''])[0]; let id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Math.random().toString(36).slice(2,10); return `${Date.now()}-${id}${ext}`; }
     async function uploadFileToStorage(file){
       const path = makeFilename(file.name);
       const { data, error } = await supabase.storage.from("photos").upload(path, file, { cacheControl: '3600', upsert: false });
       if(error) throw error;
-      // getPublicUrl returns { data: { publicUrl } }
       const { data: pub } = supabase.storage.from("photos").getPublicUrl(data.path);
       if(!pub || !pub.publicUrl) throw new Error("Failed to get public URL");
       return pub.publicUrl;
     }
-
     async function uploadFileAndInsert(file, caption, author){
       const publicUrl = await uploadFileToStorage(file);
       const { error } = await supabase.from("posts").insert([{ author, caption, image_url: publicUrl }]);
@@ -372,57 +379,23 @@
 
     postBtn.onclick = async () => {
       if(!selectedFiles.length){ alert("Choose a photo first!"); return; }
-      if(!SUPABASE_URL.includes("YOUR_PROJECT") && !SUPABASE_KEY.includes("YOUR_ANON_KEY")) {
-        // fine
-      } else {
-        // if developer forgot to replace keys, warn but still attempt
-        console.warn("Make sure to replace SUPABASE_URL and SUPABASE_KEY with real values.");
-      }
-
-      postBtn.disabled = true;
-      const origText = postBtn.textContent;
-      postBtn.textContent = "Posting...";
-
+      postBtn.disabled = true; const origText = postBtn.textContent; postBtn.textContent = "Posting...";
       try {
         const user = loadUser();
         const author = user ? user.name : "Anonymous";
         const caption = captionInput.value.trim().slice(0, 220);
-
-        // sequential upload to avoid hammering, but you can parallelize if desired
-        for(const entry of selectedFiles){
-          await uploadFileAndInsert(entry.file, caption, author);
-          // revoke preview url for that file
-          if(entry.url) URL.revokeObjectURL(entry.url);
-        }
-
-        // clear UI
-        selectedFiles = [];
-        fileInput.value = '';
-        captionInput.value = '';
-        renderPreviews();
-        await loadFeed();
-      } catch (err) {
-        console.error(err);
-        alert("Upload failed: " + (err.message || err));
-      } finally {
-        postBtn.disabled = false;
-        postBtn.textContent = origText;
-      }
+        for(const entry of selectedFiles){ await uploadFileAndInsert(entry.file, caption, author); if(entry.url) URL.revokeObjectURL(entry.url); }
+        selectedFiles = []; fileInput.value = ''; captionInput.value = ''; renderPreviews(); await loadFeed();
+      } catch (err) { console.error(err); alert("Upload failed: " + (err.message || err)); } finally { postBtn.disabled = false; postBtn.textContent = origText; }
     };
 
     async function loadFeed(){
       feed.innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--muted)'>Loading...</div>";
       try {
-        const { data: posts, error } = await supabase
-          .from("posts")
-          .select("id,author,caption,image_url,created_at,comments(id,author,text,created_at)")
-          .order("created_at", { ascending: false });
+        const { data: posts, error } = await supabase.from("posts").select("id,author,caption,image_url,created_at,comments(id,author,text,created_at)").order("created_at", { ascending: false });
         if(error) throw error;
         feed.innerHTML = '';
-        if(!posts || !posts.length){
-          feed.innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--muted)'>Sao chưa đăng gì hết z ??? 🌸</div>";
-          return;
-        }
+        if(!posts || !posts.length){ feed.innerHTML = "<div style='grid-column:1/-1;text-align:center;color:var(--muted)'>Sao chưa đăng gì hết z ??? 🌸</div>"; return; }
         const currentUser = loadUser();
         posts.forEach(p=>{
           const card = document.createElement('article'); card.className='card';
@@ -439,36 +412,18 @@
               <form class="comment-form"><input required placeholder="Write a comment..."><button>Comment</button></form>
             </div>`;
           const list = card.querySelector('.comments-list');
-          (p.comments||[]).forEach(c=>{
-            const el = document.createElement('div'); el.className='comment';
-            el.innerHTML = `<span class="c-author">${escapeHtml(c.author)}</span>: ${escapeHtml(c.text)}<small>${new Date(c.created_at).toLocaleString()}</small>`;
-            list.appendChild(el);
-          });
+          (p.comments||[]).forEach(c=>{ const el = document.createElement('div'); el.className='comment'; el.innerHTML = `<span class="c-author">${escapeHtml(c.author)}</span>: ${escapeHtml(c.text)}<small>${new Date(c.created_at).toLocaleString()}</small>`; list.appendChild(el); });
           card.querySelector('[data-dl]').onclick = () => { const a = document.createElement('a'); a.href = p.image_url; a.download = "photo.jpg"; a.click(); };
           card.querySelector('.comment-form').onsubmit = async e => {
-            e.preventDefault();
-            const input = e.target.querySelector('input');
-            const t = input.value.trim();
-            if(!t) return;
-            try {
-              const author = currentUser?.name || "Anonymous";
-              await supabase.from("comments").insert([{ post_id: p.id, author, text: t }]);
-              input.value = '';
-              await loadFeed();
-            } catch(err) {
-              console.error(err);
-              alert("Failed to post comment: " + (err.message || err));
-            }
+            e.preventDefault(); const input = e.target.querySelector('input'); const t = input.value.trim(); if(!t) return;
+            try { const author = currentUser?.name || "Anonymous"; await supabase.from("comments").insert([{ post_id: p.id, author, text: t }]); input.value = ''; await loadFeed(); } catch(err){ console.error(err); alert("Failed to post comment: " + (err.message || err)); }
           };
           feed.appendChild(card);
         });
-      } catch(err) {
-        console.error(err);
-        feed.innerHTML = "<div style='color:red'>Failed to load feed</div>";
-      }
+      } catch(err) { console.error(err); feed.innerHTML = "<div style='color:red'>Failed to load feed</div>"; }
     }
 
-    // Realtime subscriptions for posts and comments
+    // Realtime subscriptions
     try {
       supabase.channel('realtime')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'posts' }, () => loadFeed())
