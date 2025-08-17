@@ -79,22 +79,23 @@
       border:1px solid rgba(255,140,190,0.08);
       transition:transform .22s ease;
     }
-.imgwrap{
-  position:relative;
-  width:100%;
-  height:auto;               /* let the image dictate height */
-  overflow:hidden;
-  border-top-left-radius: var(--radius, 18px);
-  border-top-right-radius: var(--radius, 18px);
-  background:#fad2ea;
-}
-.card img{
-  display:block;
-  width:100%;
-  height:auto;
-  object-fit:contain;        /* ensures the whole image is visible */
-  object-position:center;
-}
+  .imgwrap {
+    position: relative;
+    width: 100%;
+    height: auto;           /* let the image determine height */
+    overflow: visible;      /* avoid cropping on mobile */
+    background: #f8eef4;
+  }
+    .card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;    /* ensures whole image is visible */
+    object-position: center;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    }
+
     .heart{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.9);padding:8px;border-radius:999px;box-shadow:0 6px 18px rgba(255,105,180,0.08);cursor:pointer}
     .meta{padding:12px}
     .caption{margin:0 0 8px;font-weight:700;color:#3a0f2e;font-size:1rem}
@@ -164,10 +165,23 @@
       .meta{padding:10px}
       .caption{font-size:0.95rem}
       .comment-form input, .comment-form button{font-size:0.9rem;padding:8px}
-      .grid{gap:12px;margin-top:14px}
-      .card{border-radius:12px}
+      .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;              /* slightly tighter gap on phones */
+      margin-top: 12px;
+      }
+      .card {
+      border-radius: 12px;
+      overflow: hidden;
+      }
       .underlay .u-img{ width: clamp(48px, 18vw, 200px); opacity:0.85; }
-      .imgwrap{ height: clamp(100px, 28vw, 260px);
+      .imgwrap {
+      position: relative;
+      width: 100%;
+      height: auto;           /* let the image determine height */
+      overflow: visible;      /* avoid cropping on mobile */
+      background: #f8eef4;
+  }
 
       /* move things a bit inward on narrow viewports */
       .underlay .u1{ left: 4%; top: 62%; max-width:140px; }
@@ -181,7 +195,7 @@
     }
   }
     /* Tweak specifically for narrow devices around iPhone widths (~390px) */
-    @media (max-width:390px){
+    @media (max-width:340px){
       html { font-size: 14px; } /* ensure compact base */
       body{ padding:10px; }
       header h1{ font-size:18px; }
@@ -195,6 +209,11 @@
       footer{ font-size:0.88rem; }
       .card{ border-radius:10px; }
       .imgwrap{ height: clamp(76px, 32vw, 180px); }
+      .grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;              /* slightly tighter gap on phones */
+      margin-top: 12px;
+  }
     }
 
     /* ensure page content stacks above the underlay */
