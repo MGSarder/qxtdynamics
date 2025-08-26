@@ -100,71 +100,42 @@
     .reveal{opacity:0;transform:translateY(20px) scale(.995);transition:opacity .6s ease, transform .6s cubic-bezier(.22,.98,.35,1)}
     .reveal.visible{opacity:1;transform:none}
     footer{padding:36px 0;color:var(--muted);text-align:center}
-    .project-hero {
-      padding: 140px 20px 60px;
-      background: linear-gradient(135deg, var(--bg), var(--bg-alt));
-      text-align: center;
-    }
-    .project-hero h1 {
-      font-size: 48px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-    .project-hero p {
-      font-size: 18px;
-      color: var(--muted);
-      max-width: 700px;
-      margin: 0 auto;
-    }
 
-    .project-image {
-      max-width: 1000px;
-      margin: 40px auto;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
+    /* Project gallery styles + captions */
+    .project-gallery{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:16px;
+      margin-top:20px;
     }
-    .project-image img {
-      width: 100%;
-      display: block;
+    .project-gallery figure{margin:0;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+    .project-gallery img{width:100%;height:300px;object-fit:cover;display:block;cursor:pointer}
+    .project-gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(180deg, transparent, rgba(0,0,0,0.6));color:#fff;font-size:14px;transform:translateY(100%);transition:transform .22s ease}
+    .project-gallery figure:hover figcaption,
+    .project-gallery figure:focus-within figcaption{
+      transform:translateY(0);
     }
+    .project-gallery .meta{position:absolute;left:12px;top:12px;background:var(--glass);padding:6px 8px;border-radius:8px;font-size:12px;color:var(--muted)}
 
-    .project-section {
-      max-width: var(--max-width);
-      margin: 80px auto;
-      padding: 0 20px;
-    }
-    .project-section h2 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-    .project-section p {
-      font-size: 16px;
-      line-height: 1.6;
-      color: var(--muted);
-    }
-    .project-section ul {
-      padding-left: 20px;
-      line-height: 1.8;
-    }
+    /* lightbox simplified */
+    .lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(1,6,12,0.8);z-index:90;opacity:0;pointer-events:none;transition:opacity .18s}
+    .lightbox.open{opacity:1;pointer-events:auto}
+    .lightbox-inner{max-width:1100px;width:calc(100% - 48px);background:transparent;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 360px;gap:12px}
+    .lightbox-inner img{width:100%;height:100%;object-fit:contain;border-radius:8px;background:#061322}
+    .lightbox-caption{padding:14px;color:var(--muted);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));font-size:15px}
+    .lightbox-close{position:absolute;right:18px;top:18px;background:rgba(255,255,255,0.04);border:0;padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
 
-    .project-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 10px;
-      margin-top: 40px;
+    @media (max-width:960px){
+      .sheet{grid-template-columns:1fr 300px}
+      .lightbox-inner{grid-template-columns:1fr 260px}
+      .project-gallery img{height:220px}
     }
-    .project-gallery img {
-      width: 400px;        /* same width */
-      height: 300px;
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: var(--shadow);
-      transition: transform 0.3s ease;
-    }
-    .project-gallery img:hover {
-      transform: scale(1.02);
+    @media (max-width:640px){
+      h1{font-size:36px}
+      .hero{padding:100px 0 60px}
+      .project-gallery img{height:180px}
+      .lightbox-inner{grid-template-columns:1fr}
+      .lightbox-caption{order:2}
     }
   </style>
 </head>
@@ -221,10 +192,38 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
   <!-- Gallery -->
   <section class="project-section" data-aos="fade-up">
     <h2>Gallery</h2>
-    <div class="project-gallery">
-        <img src="https://raw.githubusercontent.com/MGSarder/SKINSIP/refs/heads/main/0003.png" alt="Detail 1" data-aos="zoom-in" data-aos-delay="100">
-        <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9146.JPG?raw=true" alt="Detail 2" data-aos="zoom-in" data-aos-delay="200">
-        <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Detail 3" data-aos="zoom-in" data-aos-delay="300">
+    <div class="project-gallery" role="list">
+
+        <figure role="listitem" tabindex="0" data-caption="Exploded view of the dispenser showing pump, valve and reservoir — used to calculate dose precision.">
+          <span class="meta">Prototype • 2024</span>
+          <img src="https://raw.githubusercontent.com/MGSarder/SKINSIP/refs/heads/main/0003.png" alt="Exploded view of dispenser" loading="lazy" />
+          <figcaption>Exploded view of the dispenser showing pump, valve and reservoir — used to calculate dose precision.</figcaption>
+        </figure>
+
+        <figure role="listitem" tabindex="0" data-caption="User testing session — ergonomic reach and one-handed operation trials.">
+          <span class="meta">User Testing • 2024</span>
+          <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9146.JPG?raw=true" alt="User testing ergonomic reach" loading="lazy" />
+          <figcaption>User testing session — ergonomic reach and one-handed operation trials.</figcaption>
+        </figure>
+
+        <figure role="listitem" tabindex="0" data-caption="Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.">
+          <span class="meta">Design • 2024</span>
+          <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Final enclosure mockup" loading="lazy" />
+          <figcaption>Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.</figcaption>
+        </figure>
+        
+        <figure role="listitem" tabindex="0" data-caption="Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.">
+          <span class="meta">Schematics</span>
+          <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Final enclosure mockup" loading="lazy" />
+          <figcaption>Full schematics of the system.</figcaption>
+        </figure>
+
+        <figure role="listitem" tabindex="0" data-caption="Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.">
+          <span class="meta">Testing</span>
+          <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Final enclosure mockup" loading="lazy" />
+          <figcaption>Testing prototype and colleting data.</figcaption>
+        </figure>
+
     </div>
   </section>
 </main>
@@ -237,6 +236,15 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
     </div>
   </div>
 </footer>
+
+<!-- Lightbox (placed at end of body) -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="lightbox-inner" role="document">
+    <button class="lightbox-close" aria-label="Close preview">✕</button>
+    <img src="" alt="" />
+    <div class="lightbox-caption"></div>
+  </div>
+</div>
 
 <!-- JS -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -253,19 +261,45 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
       navlinks.style.display = navlinks.style.display === 'flex' ? 'none' : 'flex';
     });
   }
+
+  // Gallery lightbox and keyboard support
+  (function(){
+    const figures = document.querySelectorAll('.project-gallery figure');
+    const lightbox = document.getElementById('lightbox');
+    const lbImg = lightbox.querySelector('img');
+    const lbCaption = lightbox.querySelector('.lightbox-caption');
+    const lbClose = lightbox.querySelector('.lightbox-close');
+
+    function openLightbox(src, alt, caption){
+      lbImg.src = src;
+      lbImg.alt = alt || '';
+      lbCaption.textContent = caption || '';
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      lbClose.focus();
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden','true');
+      lbImg.src = '';
+    }
+
+    figures.forEach(fig => {
+      const img = fig.querySelector('img');
+      const caption = fig.getAttribute('data-caption') || fig.querySelector('figcaption')?.textContent || '';
+      function handler(){ openLightbox(img.src, img.alt, caption); }
+      img.addEventListener('click', handler);
+      fig.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); }
+      });
+
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox(); });
+  })();
 </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
