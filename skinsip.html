@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="stylesheet" href="style.css">
 
   <!-- AOS Animation Library -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -101,21 +100,47 @@
     .reveal.visible{opacity:1;transform:none}
     footer{padding:36px 0;color:var(--muted);text-align:center}
 
-    /* Project gallery styles + captions */
+    /* Gallery: image with description to the right */
     .project-gallery{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:16px;
+      grid-template-columns:1fr;
+      gap:18px;
       margin-top:20px;
     }
-    .project-gallery figure{margin:0;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
-    .project-gallery img{width:100%;height:300px;object-fit:cover;display:block;cursor:pointer}
-    .project-gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:12px;background:linear-gradient(180deg, transparent, rgba(0,0,0,0.6));color:#fff;font-size:14px;transform:translateY(100%);transition:transform .22s ease}
-    .project-gallery figure:hover figcaption,
-    .project-gallery figure:focus-within figcaption{
-      transform:translateY(0);
+    .project-gallery .item{
+      display:flex;
+      gap:20px;
+      align-items:flex-start;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding:12px;
+      border-radius:12px;
+      overflow:hidden;
     }
-    .project-gallery .meta{position:absolute;left:12px;top:12px;background:var(--glass);padding:6px 8px;border-radius:8px;font-size:12px;color:var(--muted)}
+    .project-gallery .item img{
+      width:420px;
+      height:300px;
+      object-fit:cover;
+      border-radius:10px;
+      flex-shrink:0;
+    }
+    .project-gallery .item .caption{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.6;
+    }
+    .project-gallery .item .caption h3{margin:0;font-size:18px;color:#fff}
+    .project-gallery .item .caption .meta{font-size:12px;color:var(--muted);text-transform:uppercase}
+
+    @media (max-width:1000px){
+      .project-gallery .item img{width:360px;height:250px}
+    }
+    @media (max-width:800px){
+      .project-gallery .item{flex-direction:column}
+      .project-gallery .item img{width:100%;height:auto}
+    }
 
     /* lightbox simplified */
     .lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(1,6,12,0.8);z-index:90;opacity:0;pointer-events:none;transition:opacity .18s}
@@ -125,18 +150,6 @@
     .lightbox-caption{padding:14px;color:var(--muted);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));font-size:15px}
     .lightbox-close{position:absolute;right:18px;top:18px;background:rgba(255,255,255,0.04);border:0;padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
 
-    @media (max-width:960px){
-      .sheet{grid-template-columns:1fr 300px}
-      .lightbox-inner{grid-template-columns:1fr 260px}
-      .project-gallery img{height:220px}
-    }
-    @media (max-width:640px){
-      h1{font-size:36px}
-      .hero{padding:100px 0 60px}
-      .project-gallery img{height:180px}
-      .lightbox-inner{grid-template-columns:1fr}
-      .lightbox-caption{order:2}
-    }
   </style>
 </head>
 <body>
@@ -161,15 +174,13 @@
     <p>A refined, innovative self dispenser blending engineering precision with modern aesthetics in beauty industry.</p>
   </section>
 
-<!-- Main Video -->
-<div class="project-image" data-aos="zoom-in" style="overflow:hidden;">
-  <video autoplay loop muted playsinline style="width:100%; height:auto; display:block; object-fit:cover;">
-    <source src="https://github.com/MGSarder/qxtdynamics/raw/main/0001-0165.mp4?raw=true" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
-
-
+  <!-- Main Video -->
+  <div class="project-image" data-aos="zoom-in" style="overflow:hidden;margin-top:24px;">
+    <video autoplay loop muted playsinline style="width:100%; height:auto; display:block; object-fit:cover;">
+      <source src="https://github.com/MGSarder/qxtdynamics/raw/main/0001-0165.mp4?raw=true" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
   <!-- Overview -->
   <section class="project-section" data-aos="fade-right">
@@ -194,35 +205,32 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
     <h2>Gallery</h2>
     <div class="project-gallery" role="list">
 
-        <figure role="listitem" tabindex="0" data-caption="Exploded view of the dispenser showing pump, valve and reservoir — used to calculate dose precision.">
-          <span class="meta">Prototype • 2024</span>
-          <img src="https://raw.githubusercontent.com/MGSarder/SKINSIP/refs/heads/main/0003.png" alt="Exploded view of dispenser" loading="lazy" />
-          <figcaption>Exploded view of the dispenser showing pump, valve and reservoir — used to calculate dose precision.</figcaption>
-        </figure>
+      <figure class="item" role="listitem" tabindex="0" data-caption="Exploded view of the dispenser showing pump, valve and reservoir — used to calculate dose precision.">
+        <img src="https://raw.githubusercontent.com/MGSarder/SKINSIP/refs/heads/main/0003.png" alt="Exploded view of dispenser" loading="lazy">
+        <div class="caption">
+          <h3>Exploded view</h3>
+          <div class="meta">Prototype • 2024</div>
+          <p>Exploded view of the dispenser showing pump, valve and reservoir — used to calculate dose precision and component tolerances.</p>
+        </div>
+      </figure>
 
-        <figure role="listitem" tabindex="0" data-caption="User testing session — ergonomic reach and one-handed operation trials.">
-          <span class="meta">User Testing • 2024</span>
-          <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9146.JPG?raw=true" alt="User testing ergonomic reach" loading="lazy" />
-          <figcaption>User testing session — ergonomic reach and one-handed operation trials.</figcaption>
-        </figure>
+      <figure class="item" role="listitem" tabindex="0" data-caption="User testing session — ergonomic reach and one-handed operation trials.">
+        <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9146.JPG?raw=true" alt="User testing ergonomic reach" loading="lazy">
+        <div class="caption">
+          <h3>User testing</h3>
+          <div class="meta">User Testing • 2024</div>
+          <p>User testing session — ergonomic reach and one-handed operation trials to refine the enclosure and button placement.</p>
+        </div>
+      </figure>
 
-        <figure role="listitem" tabindex="0" data-caption="Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.">
-          <span class="meta">Design • 2024</span>
-          <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Final enclosure mockup" loading="lazy" />
-          <figcaption>Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.</figcaption>
-        </figure>
-        
-        <figure role="listitem" tabindex="0" data-caption="Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.">
-          <span class="meta">Schematics</span>
-          <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Final enclosure mockup" loading="lazy" />
-          <figcaption>Full schematics of the system.</figcaption>
-        </figure>
-
-        <figure role="listitem" tabindex="0" data-caption="Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.">
-          <span class="meta">Testing</span>
-          <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Final enclosure mockup" loading="lazy" />
-          <figcaption>Testing prototype and colleting data.</figcaption>
-        </figure>
+      <figure class="item" role="listitem" tabindex="0" data-caption="Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.">
+        <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Final enclosure mockup" loading="lazy">
+        <div class="caption">
+          <h3>Enclosure mockup</h3>
+          <div class="meta">Design • 2024</div>
+          <p>Final enclosure mockup — anodized finish, magnetic lid and removable reservoir for easy cleaning and refill.</p>
+        </div>
+      </figure>
 
     </div>
   </section>
@@ -249,10 +257,7 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
 <!-- JS -->
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-  AOS.init({
-    duration: 800,
-    once: true
-  });
+  AOS.init({ duration: 800, once: true });
 
   const ham = document.querySelector('.hamburger');
   const navlinks = document.querySelector('.navlinks');
@@ -262,9 +267,9 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
     });
   }
 
-  // Gallery lightbox and keyboard support
+  // Lightbox: open when clicking image — caption is taken from the .caption block
   (function(){
-    const figures = document.querySelectorAll('.project-gallery figure');
+    const items = document.querySelectorAll('.project-gallery .item');
     const lightbox = document.getElementById('lightbox');
     const lbImg = lightbox.querySelector('img');
     const lbCaption = lightbox.querySelector('.lightbox-caption');
@@ -284,15 +289,17 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
       lbImg.src = '';
     }
 
-    figures.forEach(fig => {
-      const img = fig.querySelector('img');
-      const caption = fig.getAttribute('data-caption') || fig.querySelector('figcaption')?.textContent || '';
-      function handler(){ openLightbox(img.src, img.alt, caption); }
-      img.addEventListener('click', handler);
-      fig.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); }
-      });
+    items.forEach(item => {
+      const img = item.querySelector('img');
+      const captionBlock = item.querySelector('.caption');
+      const captionText = captionBlock ? captionBlock.querySelector('p')?.textContent || '' : '';
 
+      img.addEventListener('click', ()=> openLightbox(img.src, img.alt, captionText));
+
+      // keyboard support on the container: Enter/Space opens lightbox
+      item.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(img.src, img.alt, captionText); }
+      });
     });
 
     lbClose.addEventListener('click', closeLightbox);
