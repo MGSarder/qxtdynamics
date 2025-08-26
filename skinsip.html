@@ -130,12 +130,15 @@
       .project-gallery .item img{height:auto}
     }
 
-    /* lightbox */
-    .lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(1,6,12,0.8);z-index:90;opacity:0;pointer-events:none;transition:opacity .18s}
+    /* Improved lightbox: constrain images and lock background scroll */
+    .lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(1,6,12,0.8);z-index:9999;opacity:0;pointer-events:none;transition:opacity .18s}
     .lightbox.open{opacity:1;pointer-events:auto}
-    .lightbox-inner{max-width:1100px;width:calc(100% - 48px);background:transparent;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr;gap:12px}
-    .lightbox-inner img{width:100%;height:auto;object-fit:contain;border-radius:8px;background:#061322}
+    .lightbox-inner{max-width:calc(100vw - 120px);max-height:calc(100vh - 120px);width:calc(100% - 120px);height:auto;background:transparent;border-radius:12px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+    .lightbox-inner img{max-width:100%;max-height:calc(100vh - 160px);object-fit:contain;border-radius:8px;background:#061322;display:block}
     .lightbox-close{position:absolute;right:18px;top:18px;background:rgba(255,255,255,0.04);border:0;padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
+
+    /* Prevent elements from shifting when lightbox opens */
+    .no-scroll { overflow: hidden !important; }
   </style>
 </head>
 <body>
@@ -245,6 +248,10 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
     const lbClose = lightbox.querySelector('.lightbox-close');
 
     function open(src, alt){
+      // lock scrolling on background to prevent content shift
+      document.documentElement.classList.add('no-scroll');
+      document.body.classList.add('no-scroll');
+
       lbImg.src = src;
       lbImg.alt = alt || '';
       lightbox.classList.add('open');
@@ -255,9 +262,20 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
       lightbox.classList.remove('open');
       lightbox.setAttribute('aria-hidden','true');
       lbImg.src = '';
+      // restore scrolling
+      document.documentElement.classList.remove('no-scroll');
+      document.body.classList.remove('no-scroll');
     }
 
-    imgs.forEach(i => i.addEventListener('click', ()=> open(i.src, i.alt)));
+    imgs.forEach(i => {
+      // Open high-res when available (use data-full if provided, otherwise src)
+      const full = i.dataset.full || i.src;
+      i.addEventListener('click', ()=> open(full, i.alt));
+      // support keyboard opening
+      i.setAttribute('tabindex', '0');
+      i.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(full, i.alt); } });
+    });
+
     lbClose.addEventListener('click', close);
     lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) close(); });
     document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lightbox.classList.contains('open')) close(); });
