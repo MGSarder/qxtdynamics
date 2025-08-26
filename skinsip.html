@@ -100,56 +100,42 @@
     .reveal.visible{opacity:1;transform:none}
     footer{padding:36px 0;color:var(--muted);text-align:center}
 
-    /* Gallery: image with description to the right */
+    /* New gallery layout: left large image, two stacked images on the right */
     .project-gallery{
       display:grid;
-      grid-template-columns:1fr;
-      gap:18px;
+      grid-template-columns: 2fr 1fr;
+      grid-auto-rows: 1fr;
+      gap:20px;
+      align-items:stretch;
       margin-top:20px;
     }
     .project-gallery .item{
-      display:flex;
-      gap:20px;
-      align-items:flex-start;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      padding:12px;
       border-radius:12px;
       overflow:hidden;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     }
     .project-gallery .item img{
-      width:420px;
-      height:300px;
+      width:100%;
+      height:100%;
+      display:block;
       object-fit:cover;
-      border-radius:10px;
-      flex-shrink:0;
+      border-radius:12px;
     }
-    .project-gallery .item .caption{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.6;
-    }
-    .project-gallery .item .caption h3{margin:0;font-size:18px;color:#fff}
-    .project-gallery .item .caption .meta{font-size:12px;color:var(--muted);text-transform:uppercase}
+    /* left image spans two rows to create the big-left, stacked-right layout */
+    .project-gallery .item-left{ grid-row: span 2; }
 
-    @media (max-width:1000px){
-      .project-gallery .item img{width:360px;height:250px}
-    }
-    @media (max-width:800px){
-      .project-gallery .item{flex-direction:column}
-      .project-gallery .item img{width:100%;height:auto}
+    @media (max-width:900px){
+      .project-gallery{ grid-template-columns: 1fr; }
+      .project-gallery .item-left{ grid-row: auto; }
+      .project-gallery .item img{height:auto}
     }
 
-    /* lightbox simplified */
+    /* lightbox */
     .lightbox{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(1,6,12,0.8);z-index:90;opacity:0;pointer-events:none;transition:opacity .18s}
     .lightbox.open{opacity:1;pointer-events:auto}
-    .lightbox-inner{max-width:1100px;width:calc(100% - 48px);background:transparent;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 360px;gap:12px}
-    .lightbox-inner img{width:100%;height:100%;object-fit:contain;border-radius:8px;background:#061322}
-    .lightbox-caption{padding:14px;color:var(--muted);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));font-size:15px}
+    .lightbox-inner{max-width:1100px;width:calc(100% - 48px);background:transparent;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr;gap:12px}
+    .lightbox-inner img{width:100%;height:auto;object-fit:contain;border-radius:8px;background:#061322}
     .lightbox-close{position:absolute;right:18px;top:18px;background:rgba(255,255,255,0.04);border:0;padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
-
   </style>
 </head>
 <body>
@@ -200,37 +186,22 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
     </ul>
   </section>
 
-  <!-- Gallery -->
+  <!-- Gallery (visual layout like the screenshot) -->
   <section class="project-section" data-aos="fade-up">
     <h2>Gallery</h2>
     <div class="project-gallery" role="list">
 
-      <figure class="item" role="listitem" tabindex="0" data-caption="Exploded view of the dispenser showing pump, valve and reservoir — used to calculate dose precision.">
-        <img src="https://raw.githubusercontent.com/MGSarder/SKINSIP/refs/heads/main/0003.png" alt="Exploded view of dispenser" loading="lazy">
-        <div class="caption">
-          <h3>Exploded view</h3>
-          <div class="meta">Prototype • 2024</div>
-          <p>Exploded view of the dispenser showing pump, valve and reservoir — used to calculate dose precision and component tolerances.</p>
-        </div>
-      </figure>
+      <div class="item item-left" role="listitem">
+        <img src="/mnt/data/b8b3b0c7-787a-45e9-9750-d3957da899c6.png" alt="Wireframe overview" loading="lazy">
+      </div>
 
-      <figure class="item" role="listitem" tabindex="0" data-caption="User testing session — ergonomic reach and one-handed operation trials.">
-        <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9146.JPG?raw=true" alt="User testing ergonomic reach" loading="lazy">
-        <div class="caption">
-          <h3>User testing</h3>
-          <div class="meta">User Testing • 2024</div>
-          <p>User testing session — ergonomic reach and one-handed operation trials to refine the enclosure and button placement.</p>
-        </div>
-      </figure>
+      <div class="item" role="listitem">
+        <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9146.JPG?raw=true" alt="Studio setup" loading="lazy">
+      </div>
 
-      <figure class="item" role="listitem" tabindex="0" data-caption="Final enclosure mockup — anodized finish and removable reservoir for easy cleaning.">
-        <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Final enclosure mockup" loading="lazy">
-        <div class="caption">
-          <h3>Enclosure mockup</h3>
-          <div class="meta">Design • 2024</div>
-          <p>Final enclosure mockup — anodized finish, magnetic lid and removable reservoir for easy cleaning and refill.</p>
-        </div>
-      </figure>
+      <div class="item" role="listitem">
+        <img src="https://github.com/MGSarder/qxtdynamics/blob/main/IMG_9148.JPG?raw=true" alt="Rendered car" loading="lazy">
+      </div>
 
     </div>
   </section>
@@ -245,12 +216,11 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
   </div>
 </footer>
 
-<!-- Lightbox (placed at end of body) -->
+<!-- Lightbox (simple) -->
 <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
   <div class="lightbox-inner" role="document">
     <button class="lightbox-close" aria-label="Close preview">✕</button>
     <img src="" alt="" />
-    <div class="lightbox-caption"></div>
   </div>
 </div>
 
@@ -267,44 +237,30 @@ The project was recognized among the Top 10 entries in the Bach Khoa Innovation 
     });
   }
 
-  // Lightbox: open when clicking image — caption is taken from the .caption block
+  // Lightbox: click any gallery image to open full preview (no descriptions)
   (function(){
-    const items = document.querySelectorAll('.project-gallery .item');
+    const imgs = document.querySelectorAll('.project-gallery .item img');
     const lightbox = document.getElementById('lightbox');
     const lbImg = lightbox.querySelector('img');
-    const lbCaption = lightbox.querySelector('.lightbox-caption');
     const lbClose = lightbox.querySelector('.lightbox-close');
 
-    function openLightbox(src, alt, caption){
+    function open(src, alt){
       lbImg.src = src;
       lbImg.alt = alt || '';
-      lbCaption.textContent = caption || '';
       lightbox.classList.add('open');
       lightbox.setAttribute('aria-hidden','false');
       lbClose.focus();
     }
-    function closeLightbox(){
+    function close(){
       lightbox.classList.remove('open');
       lightbox.setAttribute('aria-hidden','true');
       lbImg.src = '';
     }
 
-    items.forEach(item => {
-      const img = item.querySelector('img');
-      const captionBlock = item.querySelector('.caption');
-      const captionText = captionBlock ? captionBlock.querySelector('p')?.textContent || '' : '';
-
-      img.addEventListener('click', ()=> openLightbox(img.src, img.alt, captionText));
-
-      // keyboard support on the container: Enter/Space opens lightbox
-      item.addEventListener('keydown', (e)=>{
-        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(img.src, img.alt, captionText); }
-      });
-    });
-
-    lbClose.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
-    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox(); });
+    imgs.forEach(i => i.addEventListener('click', ()=> open(i.src, i.alt)));
+    lbClose.addEventListener('click', close);
+    lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) close(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lightbox.classList.contains('open')) close(); });
   })();
 </script>
 
